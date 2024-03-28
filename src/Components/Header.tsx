@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "./Button";
-const logo = require("../Assets/logo.png");
+const logo = require("../assets/logo.png");
 
 type HeaderProps = {};
 

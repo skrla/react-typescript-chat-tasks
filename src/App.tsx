@@ -1,9 +1,9 @@
-import ChatPage from "./Pages/ChatPage";
-import ListPage from "./Pages/ListPage";
-import LoginPage from "./Pages/LoginPage";
+import ChatPage from "./pages/ChatPage";
+import ListPage from "./pages/ListPage";
+import LoginPage from "./pages/LoginPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import ProfilePage from "./Pages/ProfilePage";
-import Layout from "./Pages/Layout";
+import ProfilePage from "./pages/ProfilePage";
+import Layout from "./pages/Layout";
 
 function App() {
   return (
