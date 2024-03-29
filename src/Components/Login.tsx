@@ -2,6 +2,10 @@ import { useState } from "react";
 import Button from "./Button";
 import Input from "./Input";
 import { BE_signIn, BE_signUp } from "../backend/queries";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
+import { AuthDataType } from "../types";
 
 const Login = () => {
   const [login, setLogin] = useState(true);
@@ -10,15 +14,25 @@ const Login = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [signUpLoading, setSingUpLoading] = useState(false);
   const [signInLoading, setSignInLoading] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  
+  const auth = (
+    data: AuthDataType,
+    func: any,
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    func(data, setLoading, reset, navigate, dispatch);
+  };
 
   const handleSingUp = () => {
     const data = { email, password, confirmPassword };
-    BE_signUp(data, setSingUpLoading, reset);
+    auth(data, BE_signUp, setSingUpLoading);
   };
 
   const handleSingIn = () => {
     const data = { email, password };
-    BE_signIn(data, setSignInLoading, reset);
+    auth(data, BE_signIn, setSignInLoading);
   };
 
   const reset = () => {
