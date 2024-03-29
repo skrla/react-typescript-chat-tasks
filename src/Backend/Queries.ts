@@ -11,7 +11,7 @@ import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { defaultUser, setUser } from "../redux/userSlice";
 import { AppDispatch } from "../redux/store";
 
-const userColl = "tasks";
+const userColl = "users";
 const tasksColl = "tasks";
 const taskListColl = "taskList";
 const chatColl = "chat";
@@ -44,15 +44,14 @@ export const BE_signUp = (
           navigate("/dashboard");
         })
         .catch((error) => {
-          console.log(error);
           catchErr(error);
-          setLoading(false);
+          setLoading(false)
         });
     } else {
-      toastErr("Password must match");
+      toastErr("Password must match", setLoading);
     }
   } else {
-    toastErr("Fields shouldn't be left empty!");
+    toastErr("Fields shouldn't be left empty!", setLoading);
   }
 };
 
@@ -63,7 +62,6 @@ export const BE_signIn = (
   navigate: NavigateFunction,
   dispatch: AppDispatch
 ) => {
-  try {
     const { email, password } = data;
     if (email && password) {
       setLoading(true);
@@ -83,10 +81,8 @@ export const BE_signIn = (
           setLoading(false);
         });
     } else {
-      toastErr("Fields shouldn't be left empty!");
-      setLoading(false);
+      toastErr("Fields shouldn't be left empty!", setLoading);
     }
-  } catch (err) {}
 };
 
 const addUserToCollection = async (
