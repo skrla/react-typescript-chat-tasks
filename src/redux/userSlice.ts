@@ -23,7 +23,9 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser:(state, action) => {
-            state.currentUser = action.payload
+            const user = action.payload;
+            localStorage.setItem("chatTasksUser", JSON.stringify(user));
+            state.currentUser = action.payload;
         },
         setUsers:(state, action) => {
 
