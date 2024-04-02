@@ -20,6 +20,8 @@ const catchErr = (err: { code?: string }) => {
 
   else if(code === "unavailable") toastErr("Client is offline!")
 
+  else if(code === "auth/invalid-login-credentials") toastErr("Invalid credentials!")
+
   else {
     toastErr("Some error")
   }

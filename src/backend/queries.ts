@@ -10,6 +10,8 @@ import { NavigateFunction } from "react-router";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { defaultUser, setUser } from "../redux/userSlice";
 import { AppDispatch } from "../redux/store";
+import convertTime from "../utils/convertTime";
+import avatarGenerator from "../utils/avatarGenerator";
 
 const userColl = "users";
 const tasksColl = "tasks";
@@ -29,12 +31,15 @@ export const BE_signUp = (
     if (password === confirmPassword) {
       setLoading(true);
       createUserWithEmailAndPassword(auth, email, password)
-        .then(({ user }) => {
-          const userInfo = addUserToCollection(
+        .then(async ({ user }) => {
+
+          const imgLink = avatarGenerator(user.email?.split("@")[0] || "");
+
+          const userInfo = await addUserToCollection(
             user.uid,
             user.email || "",
             user.email?.split("@")[0] || "",
-            "imgLink"
+            imgLink
           );
 
           dispatch(setUser(userInfo));
@@ -121,7 +126,11 @@ const getUserInfo = async (id: string): Promise<UserType> => {
     username,
     email,
     bio,
-    creationTime,
-    lastSeen,
+    creationTime: creationTime
+      ? convertTime(creationTime.toDate())
+      : "No date yet: userinfo",
+    lastSeen: lastSeen
+      ? convertTime(lastSeen.toDate())
+      : "No date yet: userinfo",
   };
 };
