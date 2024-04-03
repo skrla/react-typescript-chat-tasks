@@ -1,5 +1,8 @@
 import React from "react";
-import Button from "./Button";
+import AddListBoard from "./AddListBoard";
+import Icon from "./Icon";
+import { BsFillChatFill } from "react-icons/bs";
+import { FiList } from "react-icons/fi";
 const logo = require("../assets/logo.png");
 
 type HeaderProps = {};
@@ -12,8 +15,10 @@ function Header({}: HeaderProps) {
         alt="Logo icon"
         className="w-[70px] drop-shadow-md cursor-pointer"
       />
-      <div className="flex">
-        <Button text="Add New List Board" secondary />
+      <div className="flex flex-row-reverse md:flex-row items-center justify-center gap-5 flex-wrap">
+        <AddListBoard />
+        <Icon IconName={BsFillChatFill} ping />
+        <Icon IconName={FiList} />
       </div>
     </div>
   );
