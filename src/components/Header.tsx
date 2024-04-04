@@ -1,18 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import AddListBoard from "./AddListBoard";
 import Icon from "./Icon";
 import { BsFillChatFill } from "react-icons/bs";
 import { FiList } from "react-icons/fi";
 import UserHeaderProfile from "./UserHeaderProfile";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { BE_signOut } from "../backend/queries";
+import Spinner from "./Spinner";
 const logo = require("../assets/logo.png");
 
 type HeaderProps = {};
 
 function Header({}: HeaderProps) {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleSingOut = () => {
+    BE_signOut(dispatch, navigate, setLoading);
+  };
+
   return (
     <div className="flex items-center flex-wrap sm:flex-row gap-5 justify-between bg-gradient-to-r from-myBlue to-myPink px-5 py-5 md:py-2 text-white drop-shadow-md">
       <img
@@ -31,9 +41,15 @@ function Header({}: HeaderProps) {
               <Link to="profile" className="hover:bg-gray-200 py-2 px-2 block">
                 Profile
               </Link>
-              <Link to="/auth" className="hover:bg-gray-200 py-2 px-2 block">
+              <p
+                onClick={() => !loading && handleSingOut()}
+                className={`hover:bg-gray-200 py-2 px-2 cursor-pointer flex items-center gap-4 ${
+                  loading && "cursor-wait"
+                }`}
+              >
                 Logout
-              </Link>
+                {loading && <Spinner />}
+              </p>
             </ul>
           </div>
         </div>

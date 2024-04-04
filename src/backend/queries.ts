@@ -1,14 +1,21 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { auth, db } from "./firebaseConfig";
 import { toastErr } from "../utils/toast";
 import catchErr from "../utils/catchErr";
 import { AuthDataType, SetLoadingType, UserType } from "../types";
 import { NavigateFunction } from "react-router";
-import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
-import { defaultUser, setUser } from "../redux/userSlice";
+import {
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { defaultUser, setUser, userStorageInfo } from "../redux/userSlice";
 import { AppDispatch } from "../redux/store";
 import convertTime from "../utils/convertTime";
 import avatarGenerator from "../utils/avatarGenerator";
@@ -71,14 +78,12 @@ export const BE_signIn = (
     setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then(async ({ user }) => {
-
-        await updateUserInfo({id:user.uid, isOnline: true});
+        await updateUserInfo({ id: user.uid, isOnline: true });
 
         const userInfo = await getUserInfo(user.uid);
 
         dispatch(setUser(userInfo));
 
-        console.log(user);
         setLoading(false);
         reset();
         navigate("/dashboard");
@@ -90,6 +95,25 @@ export const BE_signIn = (
   } else {
     toastErr("Fields shouldn't be left empty!", setLoading);
   }
+};
+
+export const BE_signOut = async (
+  dispatch: AppDispatch,
+  navigate: NavigateFunction,
+  setLoading: SetLoadingType
+) => {
+  setLoading(true);
+  await updateUserInfo({ isOffline: true });
+  signOut(auth)
+    .then(() => {
+      navigate("/auth");
+
+      dispatch(setUser(defaultUser));
+
+      localStorage.removeItem(userStorageInfo);
+      setLoading(false)
+    })
+    .catch((err) => catchErr(err));
 };
 
 const addUserToCollection = async (
@@ -150,11 +174,11 @@ const updateUserInfo = async ({
   isOnline?: boolean;
   isOffline?: boolean;
 }) => {
-  if(!id) {
-    id = getStorageUser().id
+  if (!id) {
+    id = getStorageUser().id;
   }
 
-  if(id) {
+  if (id) {
     const docRef = doc(db, userColl, id);
     await updateDoc(docRef, {
       ...(username && { username }),
@@ -162,12 +186,12 @@ const updateUserInfo = async ({
       ...(isOffline && { isOnline: false }),
       ...(img && { img }),
       lastSeen: serverTimestamp(),
-    });
+    }).catch((err) => catchErr(err));
   }
 };
 
 const getStorageUser = () => {
-  const user = localStorage.getItem("chatTasksUser");
-  if(user) return JSON.parse(user);
+  const user = localStorage.getItem(userStorageInfo);
+  if (user) return JSON.parse(user);
   else return null;
-}
+};
