@@ -19,8 +19,21 @@ function Header({}: HeaderProps) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  const handleNavigate = (page: string) => {
+    navigate("/dashboard/" + page);
+    setCurrentPage(page);
+  };
+
   const handleSingOut = () => {
     BE_signOut(dispatch, navigate, setLoading);
+  };
+
+  const setCurrentPage = (page: string) => {
+    localStorage.setItem("task-chat-page", page);
+  };
+
+  const getCurrentPage = () => {
+    return localStorage.getItem("task-chat-page");
   };
 
   return (
@@ -31,16 +44,38 @@ function Header({}: HeaderProps) {
         className="w-[70px] drop-shadow-md cursor-pointer"
       />
       <div className="flex flex-row-reverse md:flex-row items-center justify-center gap-5 flex-wrap">
-        <AddListBoard />
-        <Icon IconName={BsFillChatFill} ping />
-        <Icon IconName={FiList} />
+        {getCurrentPage() === "chat" ? (
+          <Icon IconName={FiList} onClick={() => handleNavigate("")} />
+        ) : getCurrentPage() === "profile" ? (
+          <>
+            <Icon
+              IconName={BsFillChatFill}
+              onClick={() => handleNavigate("chat")}
+              ping
+            />
+            <Icon IconName={FiList} onClick={() => handleNavigate("")} />
+          </>
+        ) : (
+          <>
+            <AddListBoard />
+            <Icon
+              IconName={BsFillChatFill}
+              onClick={() => handleNavigate("chat")}
+              ping
+            />
+          </>
+        )}
+
         <div className="group relative">
           <UserHeaderProfile user={currentUser} />
           <div className="absolute pt-5 hidden group-hover:block w-full min-w-max">
             <ul className="w-full bg-white overflow-hidden rounded-md shadow-md text-gray-700 pt-1">
-              <Link to="profile" className="hover:bg-gray-200 py-2 px-2 block">
+              <p
+                onClick={() => handleNavigate("profile")}
+                className="hover:bg-gray-200 py-2 px-2 block cursor-pointer"
+              >
                 Profile
-              </Link>
+              </p>
               <p
                 onClick={() => !loading && handleSingOut()}
                 className={`hover:bg-gray-200 py-2 px-2 cursor-pointer flex items-center gap-4 ${
