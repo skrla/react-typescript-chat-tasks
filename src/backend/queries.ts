@@ -190,7 +190,7 @@ const updateUserInfo = async ({
   }
 };
 
-const getStorageUser = () => {
+export const getStorageUser = () => {
   const user = localStorage.getItem(userStorageInfo);
   if (user) return JSON.parse(user);
   else return null;

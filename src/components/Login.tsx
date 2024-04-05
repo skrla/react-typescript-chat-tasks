@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./Button";
 import Input from "./Input";
-import { BE_signIn, BE_signUp } from "../backend/queries";
+import { BE_signIn, BE_signUp, getStorageUser } from "../backend/queries";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { AuthDataType } from "../types";
+import { setUser } from "../redux/userSlice";
 
 const Login = () => {
   const [login, setLogin] = useState(true);
@@ -16,6 +17,7 @@ const Login = () => {
   const [signInLoading, setSignInLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const user = getStorageUser();
   
   const auth = (
     data: AuthDataType,
@@ -40,6 +42,13 @@ const Login = () => {
     setPassword("");
     setConfirmPassword("");
   };
+
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(setUser(user));
+      navigate("/dashboard");
+    }
+  }, [dispatch, navigate, user]);
 
   return (
     <div className="w-full md:w-[450px]">
