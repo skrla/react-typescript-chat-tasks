@@ -55,20 +55,30 @@ function Header({}: HeaderProps) {
       />
       <div className="flex flex-row-reverse md:flex-row items-center justify-center gap-5 flex-wrap">
         {getCurrentPage() === "chat" ? (
-          <Icon IconName={FiList} onClick={() => handleNavigate("")} />
+          <Icon
+            IconName={FiList}
+            onClick={() => handleNavigate("")}
+            reduceOpacityOnHover
+          />
         ) : getCurrentPage() === "profile" ? (
           <>
             <Icon
               IconName={BsFillChatFill}
               onClick={() => handleNavigate("chat")}
+              reduceOpacityOnHover
               ping
             />
-            <Icon IconName={FiList} onClick={() => handleNavigate("")} />
+            <Icon
+              IconName={FiList}
+              onClick={() => handleNavigate("")}
+              reduceOpacityOnHover
+            />
           </>
         ) : (
           <>
             <AddListBoard />
             <Icon
+              reduceOpacityOnHover
               IconName={BsFillChatFill}
               onClick={() => handleNavigate("chat")}
               ping
