@@ -15,3 +15,18 @@ export type UserType = {
   lastSeen?: string;
   bio?: string;
 };
+
+export type TaskListType = {
+  id?: string,
+  title: string;
+  editMode?: boolean,
+  tasks?: TaskType[]
+}
+
+export type TaskType = {
+  id?:string,
+  title:string,
+  description?: string,
+  editMode?: boolean,
+  collapsed?: boolean
+}

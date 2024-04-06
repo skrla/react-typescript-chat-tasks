@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Button from "./Button";
 import Input from "./Input";
-import { BE_signIn, BE_signUp, getStorageUser } from "../backend/queries";
+import { BE_signIn, BE_signUp, getStorageUser } from "../backend/userQueries";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
@@ -18,7 +18,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const user = getStorageUser();
-  
+
   const auth = (
     data: AuthDataType,
     func: any,

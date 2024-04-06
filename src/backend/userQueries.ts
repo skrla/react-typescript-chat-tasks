@@ -21,8 +21,6 @@ import convertTime from "../utils/convertTime";
 import avatarGenerator from "../utils/avatarGenerator";
 
 const userColl = "users";
-const tasksColl = "tasks";
-const taskListColl = "taskList";
 const chatColl = "chat";
 const messagesColl = "messages";
 
@@ -111,7 +109,7 @@ export const BE_signOut = async (
       dispatch(setUser(defaultUser));
 
       localStorage.removeItem(userStorageInfo);
-      setLoading(false)
+      setLoading(false);
     })
     .catch((err) => catchErr(err));
 };
@@ -161,6 +159,12 @@ const getUserInfo = async (id: string): Promise<UserType> => {
   };
 };
 
+export const getStorageUser = () => {
+  const user = localStorage.getItem(userStorageInfo);
+  if (user) return JSON.parse(user);
+  else return null;
+};
+
 const updateUserInfo = async ({
   id,
   username,
@@ -188,10 +192,4 @@ const updateUserInfo = async ({
       lastSeen: serverTimestamp(),
     }).catch((err) => catchErr(err));
   }
-};
-
-export const getStorageUser = () => {
-  const user = localStorage.getItem(userStorageInfo);
-  if (user) return JSON.parse(user);
-  else return null;
 };

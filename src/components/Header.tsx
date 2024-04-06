@@ -7,7 +7,7 @@ import UserHeaderProfile from "./UserHeaderProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useNavigate } from "react-router-dom";
-import { BE_signOut, getStorageUser } from "../backend/queries";
+import { BE_signOut, getStorageUser } from "../backend/userQueries";
 import Spinner from "./Spinner";
 import { setUser } from "../redux/userSlice";
 const logo = require("../assets/logo.png");
