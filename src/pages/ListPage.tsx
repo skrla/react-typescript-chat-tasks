@@ -1,18 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SingleTaskList from "../components/SingleTaskList";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
+import { BE_getTaskList } from "../backend/taskQueries";
+import { ListLoader } from "../components/Loaders";
+import FlipMove from "react-flip-move";
 
 function ListPage() {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const taskList = useSelector(
+    (state: RootState) => state.taskList.currentTaskList
+  );
+
+  useEffect(() => {
+    BE_getTaskList(dispatch, setLoading);
+  }, [dispatch]);
+
   return (
     <div className="p-10">
-      <div className="flex flex-wrap justify-center gap-10">
-        <SingleTaskList />
-        <SingleTaskList />
-        <SingleTaskList />
-        <SingleTaskList />
-        <SingleTaskList />
-        <SingleTaskList />
-        <SingleTaskList />
-      </div>
+      {loading ? (
+        <ListLoader />
+      ) : (
+        <FlipMove className="flex flex-wrap justify-center gap-10">
+          {taskList.map((t) => (
+            <SingleTaskList key={t.id} singleTaskList={t} />
+          ))}
+        </FlipMove>
+      )}
     </div>
   );
 }

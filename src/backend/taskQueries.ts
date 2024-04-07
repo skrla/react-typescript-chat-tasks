@@ -1,6 +1,19 @@
-import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { AppDispatch } from "../redux/store";
-import { addTaskList, defaultTask, defaultTaskList } from "../redux/taskListSlice";
+import {
+  addTaskList,
+  defaultTask,
+  defaultTaskList,
+  setTaskList,
+} from "../redux/taskListSlice";
 import { SetLoadingType, TaskListType } from "../types";
 import { db } from "./firebaseConfig";
 import { getStorageUser } from "./userQueries";
@@ -22,19 +35,53 @@ export const BE_addTaskList = async (
 
   //TODO
   //Napraviti se doda samo id u postojeću task bez zvanja ponovo firebasea
-  const docRef = doc(db, list.path)
-  const docSnap = await getDoc(docRef)
+  const docRef = doc(db, list.path);
+  const docSnap = await getDoc(docRef);
 
-  if(docSnap.exists()) {
-    const newlyAddedDoc:TaskListType = {
-        id: docSnap.id,
-        title: docSnap.data().title
-    }
+  if (docSnap.exists()) {
+    const newlyAddedDoc: TaskListType = {
+      id: docSnap.id,
+      title: docSnap.data().title,
+    };
 
-    dispatch(addTaskList(newlyAddedDoc))
+    dispatch(addTaskList(newlyAddedDoc));
     setLoading(false);
   } else {
-    toastErr("BE_addTaskList: No such doc")
-    setLoading(false)
+    toastErr("BE_addTaskList: No such doc");
+    setLoading(false);
   }
+};
+
+export const BE_getTaskList = async (
+  dispatch: AppDispatch,
+  setLoading: SetLoadingType
+) => {
+  setLoading(true);
+
+  const taskList = await getAllTaskList();
+
+  dispatch(setTaskList(taskList));
+
+  setLoading(false);
+};
+
+const getAllTaskList = async () => {
+  const q = query(
+    collection(db, taskListColl),
+    where("userId", "==", getStorageUser().id)
+  );
+  const taskListSnapshot = await getDocs(q);
+  const taskList: TaskListType[] = [];
+
+  taskListSnapshot.forEach((doc) => {
+    const { title } = doc.data();
+    taskList.push({
+      id: doc.id,
+      title,
+      editMode: false,
+      tasks: [],
+    });
+  });
+
+  return taskList;
 };
