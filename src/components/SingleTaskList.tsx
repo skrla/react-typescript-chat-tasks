@@ -9,7 +9,7 @@ import {
 } from "react-icons/md";
 import Tasks from "./Tasks";
 import { TaskListType } from "../types";
-import { BE_saveTaskList } from "../backend/taskQueries";
+import { BE_deleteTaskList, BE_saveTaskList } from "../backend/taskQueries";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { editTaskListSwitch } from "../redux/taskListSlice";
@@ -34,6 +34,11 @@ const SingleTaskList = forwardRef(
 
     const checkEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") handleSaveTaskListTitle();
+    };
+
+    const handleDelete = () => {
+      //TODO napraviti da tasks ne budu opcionalni u typovima
+      if (id && tasks) BE_deleteTaskList(id, tasks, dispatch, setLoading);
     };
 
     return (
@@ -63,7 +68,11 @@ const SingleTaskList = forwardRef(
                 }
                 loading={editMode && loading}
               />
-              <Icon IconName={MdDelete} />
+              <Icon
+                IconName={MdDelete}
+                loading={loading}
+                onClick={handleDelete}
+              />
               <Icon IconName={MdKeyboardArrowDown} />
             </div>
           </div>

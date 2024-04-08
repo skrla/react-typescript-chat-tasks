@@ -21,7 +21,11 @@ function ListPage() {
     <div className="p-10">
       {loading ? (
         <ListLoader />
-      ) : taskList.length === 0 ? <h1 className="text-3xl text-center text-gray-300 mt-10">No task list added, add some!</h1> : (
+      ) : taskList.length === 0 ? (
+        <h1 className="text-3xl text-center text-gray-300 mt-10">
+          No task list added, add some!
+        </h1>
+      ) : (
         <FlipMove className="flex flex-wrap justify-center gap-10">
           {taskList.map((t) => (
             <SingleTaskList key={t.id} singleTaskList={t} />

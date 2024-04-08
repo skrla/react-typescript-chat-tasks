@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { TaskListType, TaskType } from "../types";
 
 const initialState: TaskListSliceType = {
@@ -50,6 +50,12 @@ const taskListSlice = createSlice({
         return e;
       });
     },
+    deleteTaskList: (state, action) => {
+      const listId = action.payload;
+      state.currentTaskList = state.currentTaskList.filter(
+        (e) => e.id !== listId
+      );
+    },
   },
 });
 
@@ -58,5 +64,6 @@ export const {
   addTaskList,
   updateTaskListTitle,
   editTaskListSwitch,
+  deleteTaskList,
 } = taskListSlice.actions;
 export default taskListSlice.reducer;

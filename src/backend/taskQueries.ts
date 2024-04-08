@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -13,10 +14,11 @@ import {
   addTaskList,
   defaultTask,
   defaultTaskList,
+  deleteTaskList,
   setTaskList,
   updateTaskListTitle,
 } from "../redux/taskListSlice";
-import { SetLoadingType, TaskListType } from "../types";
+import { SetLoadingType, TaskListType, TaskType } from "../types";
 import { db } from "./firebaseConfig";
 import { getStorageUser } from "./userQueries";
 import { toastErr } from "../utils/toast";
@@ -85,6 +87,55 @@ export const BE_saveTaskList = async (
   dispatch(
     updateTaskListTitle({ id: updatedTaskList.id, ...updatedTaskList.data() })
   );
+};
+
+export const BE_deleteTaskList = async (
+  listId: string,
+  tasks: TaskType[],
+  dispatch: AppDispatch,
+  setLoading: SetLoadingType
+) => {
+  setLoading(true);
+
+  if (tasks.length > 0) {
+    //TODO probati sa foreach
+    for (let i = 0; i < tasks.length; i++) {
+      const { id } = tasks[i];
+      if (id) BE_deleteTask(listId, id, dispatch, setLoading);
+    }
+  }
+
+  const listRef = doc(db, taskListColl, listId);
+  //TODO bez poziva provjeriti je li obrisano
+  await deleteDoc(listRef);
+
+  const deletedTaskList = await getDoc(listRef);
+
+  if (!deletedTaskList.exists()) {
+    setLoading(false);
+    dispatch(deleteTaskList(listId));
+  }
+};
+
+export const BE_deleteTask = async (
+  listId: string,
+  id: string,
+  dispatch: AppDispatch,
+  setLoading?: SetLoadingType
+) => {
+  setLoading && setLoading(true);
+
+  const taskRef = doc(db, taskListColl, listId, tasksColl, id);
+
+  //TODO bez poziva provjeriti jel obrisan
+  await deleteDoc(taskRef);
+
+  const deletedTask = await getDoc(taskRef);
+
+  if (!deletedTask.exists()) {
+    setLoading && setLoading(false);
+    //dispatch(deleteTask);
+  }
 };
 
 const getAllTaskList = async () => {

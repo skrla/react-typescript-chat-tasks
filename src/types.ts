@@ -17,16 +17,16 @@ export type UserType = {
 };
 
 export type TaskListType = {
-  id?: string,
+  id?: string;
   title: string;
-  editMode?: boolean,
-  tasks?: TaskType[]
-}
+  editMode?: boolean;
+  tasks?: TaskType[];
+};
 
 export type TaskType = {
-  id?:string,
-  title:string,
-  description?: string,
-  editMode?: boolean,
-  collapsed?: boolean
-}
+  id?: string;
+  title: string;
+  description?: string;
+  editMode?: boolean;
+  collapsed?: boolean;
+};
