@@ -47,7 +47,7 @@ function Header({}: HeaderProps) {
   }, [navigate, user?.id, dispatch]);
 
   return (
-    <div className="flex items-center flex-wrap sm:flex-row gap-5 justify-between bg-gradient-to-r from-myBlue to-myPink px-5 py-5 md:py-2 text-white drop-shadow-md">
+    <div className="flex items-center flex-wrap z-10 sm:flex-row gap-5 justify-between bg-gradient-to-r from-myBlue to-myPink px-5 py-5 md:py-2 text-white drop-shadow-md">
       <img
         src={logo}
         alt="Logo icon"
