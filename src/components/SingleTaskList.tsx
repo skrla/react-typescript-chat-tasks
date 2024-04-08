@@ -1,10 +1,18 @@
 import React, { forwardRef, useState } from "react";
 import Icon from "./Icon";
-import { MdAdd, MdDelete, MdEdit, MdKeyboardArrowDown, MdSave } from "react-icons/md";
+import {
+  MdAdd,
+  MdDelete,
+  MdEdit,
+  MdKeyboardArrowDown,
+  MdSave,
+} from "react-icons/md";
 import Tasks from "./Tasks";
 import { TaskListType } from "../types";
-import Input from "./Input";
-import { onChange } from "react-toastify/dist/core/store";
+import { BE_saveTaskList } from "../backend/taskQueries";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
+import { editTaskListSwitch } from "../redux/taskListSlice";
 
 type SingleTaskListType = {
   singleTaskList: TaskListType;
@@ -17,11 +25,16 @@ const SingleTaskList = forwardRef(
   ) => {
     const { id, editMode, tasks, title } = singleTaskList;
     const [editTitle, setEditTitle] = useState(title);
-
+    const dispatch = useDispatch<AppDispatch>();
+    const [loading, setLoading] = useState(false);
 
     const handleSaveTaskListTitle = () => {
-      
-    }
+      if (id) BE_saveTaskList(dispatch, setLoading, id, editTitle);
+    };
+
+    const checkEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") handleSaveTaskListTitle();
+    };
 
     return (
       <div ref={ref} className="relative">
@@ -30,7 +43,8 @@ const SingleTaskList = forwardRef(
             {editMode ? (
               <input
                 value={editTitle}
-                onChange={e => setEditTitle(e.target.value)}
+                onKeyDown={(e) => checkEnterKey(e)}
+                onChange={(e) => setEditTitle(e.target.value)}
                 placeholder="Enter task list title"
                 type="text"
                 className="flex-1 bg-transparent placeholder-gray-300 px-3 py-1 border-[1px] border-white rounded-md"
@@ -40,7 +54,15 @@ const SingleTaskList = forwardRef(
             )}
 
             <div>
-              <Icon IconName={editMode ? MdSave : MdEdit} onClick={() => editMode ? handleSaveTaskListTitle() : null} />
+              <Icon
+                IconName={editMode ? MdSave : MdEdit}
+                onClick={() =>
+                  editMode
+                    ? handleSaveTaskListTitle()
+                    : dispatch(editTaskListSwitch({ id }))
+                }
+                loading={editMode && loading}
+              />
               <Icon IconName={MdDelete} />
               <Icon IconName={MdKeyboardArrowDown} />
             </div>

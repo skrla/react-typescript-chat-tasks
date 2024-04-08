@@ -5,6 +5,7 @@ import {
   getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { AppDispatch } from "../redux/store";
@@ -13,6 +14,7 @@ import {
   defaultTask,
   defaultTaskList,
   setTaskList,
+  updateTaskListTitle,
 } from "../redux/taskListSlice";
 import { SetLoadingType, TaskListType } from "../types";
 import { db } from "./firebaseConfig";
@@ -63,6 +65,26 @@ export const BE_getTaskList = async (
   dispatch(setTaskList(taskList));
 
   setLoading(false);
+};
+
+export const BE_saveTaskList = async (
+  dispatch: AppDispatch,
+  setLoading: SetLoadingType,
+  listId: string,
+  title: string
+) => {
+  setLoading(true);
+
+  await updateDoc(doc(db, taskListColl, listId), { title });
+
+  //TODO izbaciti ponovo zvanje getDoca
+  const updatedTaskList = await getDoc(doc(db, taskListColl, listId));
+
+  setLoading(false);
+
+  dispatch(
+    updateTaskListTitle({ id: updatedTaskList.id, ...updatedTaskList.data() })
+  );
 };
 
 const getAllTaskList = async () => {
