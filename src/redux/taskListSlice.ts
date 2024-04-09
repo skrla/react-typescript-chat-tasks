@@ -7,6 +7,7 @@ const initialState: TaskListSliceType = {
 
 export const defaultTaskList: TaskListType = {
   title: "Sample Task List",
+  tasks: [],
 };
 
 type TaskListSliceType = {
@@ -56,6 +57,22 @@ const taskListSlice = createSlice({
         (e) => e.id !== listId
       );
     },
+    addTask: (state, action) => {
+      const { listId, newTask } = action.payload;
+
+      state.currentTaskList = state.currentTaskList.map((e) => {
+        if (listId === e.id) {
+          e.editMode = false;
+          e.tasks = e.tasks?.map((t) => {
+            t.editMode = false;
+            t.collapsed = true;
+            return t;
+          });
+          e.tasks?.push({ ...newTask, editMode: true, collapsed: false });
+        }
+        return e;
+      });
+    },
   },
 });
 
@@ -65,5 +82,6 @@ export const {
   updateTaskListTitle,
   editTaskListSwitch,
   deleteTaskList,
+  addTask,
 } = taskListSlice.actions;
 export default taskListSlice.reducer;

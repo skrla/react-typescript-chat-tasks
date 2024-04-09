@@ -9,7 +9,11 @@ import {
 } from "react-icons/md";
 import Tasks from "./Tasks";
 import { TaskListType } from "../types";
-import { BE_deleteTaskList, BE_saveTaskList } from "../backend/taskQueries";
+import {
+  BE_addTask,
+  BE_deleteTaskList,
+  BE_saveTaskList,
+} from "../backend/taskQueries";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { editTaskListSwitch } from "../redux/taskListSlice";
@@ -39,6 +43,10 @@ const SingleTaskList = forwardRef(
     const handleDelete = () => {
       //TODO napraviti da tasks ne budu opcionalni u typovima
       if (id && tasks) BE_deleteTaskList(id, tasks, dispatch, setLoading);
+    };
+
+    const handleAddTask = () => {
+      if (id) BE_addTask(id, dispatch, setLoading);
     };
 
     return (
@@ -76,11 +84,13 @@ const SingleTaskList = forwardRef(
               <Icon IconName={MdKeyboardArrowDown} />
             </div>
           </div>
-          <Tasks />
+          {id && <Tasks tasks={tasks || []} listId={id} />}
         </div>
         <Icon
           IconName={MdAdd}
+          onClick={handleAddTask}
           reduceOpacityOnHover
+          loading={loading}
           className="absolute -top-3 -left-5 drop-shadow-lg hover:bg-myPink"
         />
       </div>

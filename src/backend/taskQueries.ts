@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { AppDispatch } from "../redux/store";
 import {
+  addTask,
   addTaskList,
   defaultTask,
   defaultTaskList,
@@ -22,6 +23,7 @@ import { SetLoadingType, TaskListType, TaskType } from "../types";
 import { db } from "./firebaseConfig";
 import { getStorageUser } from "./userQueries";
 import { toastErr } from "../utils/toast";
+import catchErr from "../utils/catchErr";
 
 const tasksColl = "tasks";
 const taskListColl = "taskList";
@@ -136,6 +138,35 @@ export const BE_deleteTask = async (
     setLoading && setLoading(false);
     //dispatch(deleteTask);
   }
+};
+
+export const BE_addTask = async (
+  listId: string,
+  dispatch: AppDispatch,
+  setLoading: SetLoadingType
+) => {
+  setLoading(true);
+
+  const task = await addDoc(collection(db, taskListColl, listId, tasksColl), {
+    ...defaultTask,
+  });
+
+  const newTaskSnapShot = await getDoc(doc(db, task.path));
+
+  if (newTaskSnapShot.exists()) {
+    const { title, description } = newTaskSnapShot.data();
+    const newTask: TaskType = {
+      id: newTaskSnapShot.id,
+      title,
+      description,
+    };
+
+    dispatch(addTask({ listId, newTask }));
+  } else {
+    toastErr("BE_addTask: No such document");
+  }
+
+  setLoading(false);
 };
 
 const getAllTaskList = async () => {
