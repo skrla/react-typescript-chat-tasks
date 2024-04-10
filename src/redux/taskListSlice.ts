@@ -73,6 +73,52 @@ const taskListSlice = createSlice({
         return e;
       });
     },
+    collapseTask: (state, action) => {
+      const { listId, taskId } = action.payload;
+      const taskList = state.currentTaskList.find((e) => listId === e.id);
+      const listIndex = state.currentTaskList.findIndex((e) => listId === e.id);
+      taskList?.tasks?.map((e) => {
+        if (e.id === taskId) {
+          e.collapsed = !e.collapsed;
+        }
+      });
+
+      if (taskList) state.currentTaskList[listIndex] = taskList;
+    },
+    editTaskSwitch: (state, action) => {
+      const { listId, taskId, value } = action.payload;
+      state.currentTaskList = state.currentTaskList.map((e) => {
+        if (e.id === listId) {
+          e.tasks = e.tasks?.map((se) => {
+            if (se.id === taskId) {
+              se.editMode = value !== undefined ? value : true;
+            }
+            return se
+          });
+        }
+        return e;
+      });
+    },
+    saveTask: (state, action) => {
+      const { listId, taskId, title, description } = action.payload;
+
+      state.currentTaskList = state.currentTaskList.map((e) => {
+        if (e.id === listId) {
+          e.tasks = e.tasks?.map((se) => {
+            if (se.id === taskId) {
+              se = {
+                ...se,
+                title,
+                description,
+                editMode: false,
+              };
+            }
+            return se;
+          });
+        }
+        return e;
+      });
+    },
   },
 });
 
@@ -83,5 +129,8 @@ export const {
   editTaskListSwitch,
   deleteTaskList,
   addTask,
+  collapseTask,
+  editTaskSwitch,
+  saveTask,
 } = taskListSlice.actions;
 export default taskListSlice.reducer;

@@ -1,7 +1,11 @@
 import React, { forwardRef, useState } from "react";
 import Icon from "./Icon";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdDelete, MdEdit, MdSave } from "react-icons/md";
 import { TaskType } from "../types";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
+import { collapseTask, editTaskSwitch } from "../redux/taskListSlice";
+import { BE_saveTask } from "../backend/taskQueries";
 
 type TaskTypeProps = {
   task: TaskType;
@@ -16,6 +20,25 @@ const Task = forwardRef(
     const { id, title, description, editMode, collapsed } = task;
     const [editTitle, setEditTitle] = useState(title);
     const [editDescription, setEditDescription] = useState(description);
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const handleSave = () => {
+      const taskData: TaskType = {
+        id,
+        title: editTitle,
+        description: editDescription,
+      };
+      BE_saveTask(listId, taskData, dispatch, setLoading);
+    };
+
+    const handleEditMode = () => {
+      dispatch(editTaskSwitch({ listId, taskId: id }));
+    };
+
+    const handleOnClick = () => {
+      editMode ? handleSave() : handleEditMode();
+    };
 
     return (
       <div
@@ -31,7 +54,12 @@ const Task = forwardRef(
               onChange={(e) => setEditTitle(e.target.value)}
             />
           ) : (
-            <p className="cursor-pointer">{title}</p>
+            <p
+              onClick={() => dispatch(collapseTask({ listId, taskId: id }))}
+              className="cursor-pointer"
+            >
+              {title}
+            </p>
           )}
         </div>
         {!collapsed && (
@@ -49,7 +77,11 @@ const Task = forwardRef(
                 <p className="p-2 text-justify">{description}</p>
               )}
               <div className="flex justify-end">
-                <Icon IconName={MdEdit} />
+                <Icon
+                  IconName={editMode ? MdSave : MdEdit}
+                  onClick={handleOnClick}
+                  loading={editMode && loading}
+                />
                 <Icon IconName={MdDelete} />
               </div>
             </div>

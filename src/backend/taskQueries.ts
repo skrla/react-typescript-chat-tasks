@@ -16,6 +16,7 @@ import {
   defaultTask,
   defaultTaskList,
   deleteTaskList,
+  saveTask,
   setTaskList,
   updateTaskListTitle,
 } from "../redux/taskListSlice";
@@ -23,7 +24,6 @@ import { SetLoadingType, TaskListType, TaskType } from "../types";
 import { db } from "./firebaseConfig";
 import { getStorageUser } from "./userQueries";
 import { toastErr } from "../utils/toast";
-import catchErr from "../utils/catchErr";
 
 const tasksColl = "tasks";
 const taskListColl = "taskList";
@@ -167,6 +167,33 @@ export const BE_addTask = async (
   }
 
   setLoading(false);
+};
+
+export const BE_saveTask = async (
+  listId: string,
+  data: TaskType,
+  dispatch: AppDispatch,
+  setLoading: SetLoadingType
+) => {
+  setLoading(true);
+  const { id, title, description } = data;
+  if (id) {
+    const taskRef = doc(db, taskListColl, listId, tasksColl, id);
+    await updateDoc(taskRef, { title, description });
+
+    //Todo izbaciti ovo
+    const updatedTask = await getDoc(taskRef);
+    setLoading(false);
+    if (updatedTask) {
+      dispatch(
+        saveTask({ listId, taskId: updatedTask.id, ...updatedTask.data() })
+      );
+    } else {
+      toastErr("BE_saveTask: doc not found");
+    }
+  } else {
+    toastErr("BE_saveTask: id not found");
+  }
 };
 
 const getAllTaskList = async () => {
