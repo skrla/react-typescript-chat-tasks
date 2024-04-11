@@ -27,7 +27,7 @@ function Icon({
       disabled={loading}
       className={`relative p-3 rounded-full cursor-pointer hover:bg-myBlue ${
         reduceOpacityOnHover
-          ? "bg-myBlue text-white border-2 border-white hover:drop-shadow-lg" 
+          ? "bg-myBlue hover:bg-myPink text-white border-2 border-white hover:drop-shadow-lg"
           : "hover:bg-opacity-30"
       } ${loading && "cursor-wait"} ${className}`}
     >

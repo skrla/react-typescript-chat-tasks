@@ -15,9 +15,11 @@ import {
   addTaskList,
   defaultTask,
   defaultTaskList,
+  deleteTask,
   deleteTaskList,
   saveTask,
   setTaskList,
+  setTasks,
   updateTaskListTitle,
 } from "../redux/taskListSlice";
 import { SetLoadingType, TaskListType, TaskType } from "../types";
@@ -119,6 +121,33 @@ export const BE_deleteTaskList = async (
   }
 };
 
+export const BE_getTasks = async (
+  listId: string,
+  dispatch: AppDispatch,
+  setLoading: SetLoadingType
+) => {
+  setLoading(true);
+  const tasksRef = collection(db, taskListColl, listId, tasksColl);
+  const tasksSnapshot = await getDocs(tasksRef);
+  const tasks: TaskType[] = [];
+
+  if (!tasksSnapshot.empty) {
+    tasksSnapshot.forEach((task) => {
+      const { title, description } = task.data();
+      tasks.push({
+        id: task.id,
+        title,
+        description,
+        editMode: false,
+        collapsed: true,
+      });
+    });
+  }
+
+  dispatch(setTasks({ listId, tasks }));
+  setLoading(false);
+};
+
 export const BE_deleteTask = async (
   listId: string,
   id: string,
@@ -136,7 +165,7 @@ export const BE_deleteTask = async (
 
   if (!deletedTask.exists()) {
     setLoading && setLoading(false);
-    //dispatch(deleteTask);
+    dispatch(deleteTask({ listId, id }));
   }
 };
 
