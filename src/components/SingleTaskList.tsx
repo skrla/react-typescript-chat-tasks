@@ -4,7 +4,7 @@ import {
   MdAdd,
   MdDelete,
   MdEdit,
-  MdKeyboardArrowDown,
+  MdKeyboardArrowUp,
   MdSave,
 } from "react-icons/md";
 import Tasks from "./Tasks";
@@ -17,7 +17,7 @@ import {
 } from "../backend/taskQueries";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
-import { editTaskListSwitch } from "../redux/taskListSlice";
+import { collapseAllTasks, editTaskListSwitch } from "../redux/taskListSlice";
 import { TaskListLoader } from "./Loaders";
 
 type SingleTaskListType = {
@@ -29,11 +29,12 @@ const SingleTaskList = forwardRef(
     { singleTaskList }: SingleTaskListType,
     ref: React.LegacyRef<HTMLDivElement> | undefined
   ) => {
-    const { id, editMode, tasks, title } = singleTaskList;
+    const { id, editMode, tasks = [], title } = singleTaskList;
     const [editTitle, setEditTitle] = useState(title);
     const dispatch = useDispatch<AppDispatch>();
     const [loading, setLoading] = useState(false);
     const [tasksLoading, setTasksLoading] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
 
     const handleSaveTaskListTitle = () => {
       if (id) BE_saveTaskList(dispatch, setLoading, id, editTitle);
@@ -52,9 +53,28 @@ const SingleTaskList = forwardRef(
       if (id) BE_addTask(id, dispatch, setLoading);
     };
 
+    const handleCollapse = () => {
+      if (collapsed) {
+        return dispatch(collapseAllTasks({ listId: id, value: false }));
+      }
+      return dispatch(collapseAllTasks({ listId: id }));
+    };
+
     useEffect(() => {
       if (id) BE_getTasks(id, dispatch, setTasksLoading);
-    }, []);
+    }, [id, dispatch]);
+
+    useEffect(() => {
+      const checkCollapsed = () => {
+        tasks?.forEach((task) => {
+          if (!task.collapsed) {
+            return setCollapsed(false);
+          }
+          setCollapsed(true);
+        });
+      };
+      checkCollapsed();
+    }, [tasks]);
 
     return (
       <div ref={ref} className="relative">
@@ -88,7 +108,11 @@ const SingleTaskList = forwardRef(
                 loading={loading}
                 onClick={handleDelete}
               />
-              <Icon IconName={MdKeyboardArrowDown} />
+              <Icon
+                onClick={handleCollapse}
+                IconName={MdKeyboardArrowUp}
+                className={`${collapsed && "rotate-180"}`}
+              />
             </div>
           </div>
           {tasksLoading ? (

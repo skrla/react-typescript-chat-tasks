@@ -63,15 +63,15 @@ function Header({}: HeaderProps) {
         ) : getCurrentPage() === "profile" ? (
           <>
             <Icon
+              IconName={FiList}
+              onClick={() => handleNavigate("")}
+              reduceOpacityOnHover
+            />
+            <Icon
               IconName={BsFillChatFill}
               onClick={() => handleNavigate("chat")}
               reduceOpacityOnHover
               ping
-            />
-            <Icon
-              IconName={FiList}
-              onClick={() => handleNavigate("")}
-              reduceOpacityOnHover
             />
           </>
         ) : (

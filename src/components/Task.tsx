@@ -41,8 +41,8 @@ const Task = forwardRef(
     };
 
     const handleDelete = () => {
-      if(id) BE_deleteTask(listId,id, dispatch, setLoading)
-    }
+      if (id) BE_deleteTask(listId, id, dispatch, setLoading);
+    };
 
     return (
       <div
@@ -85,10 +85,14 @@ const Task = forwardRef(
                   IconName={editMode ? MdSave : MdEdit}
                   onClick={handleOnClick}
                   loading={editMode && loading}
+                  size={16}
                 />
-                <Icon IconName={MdDelete}
-                loading={loading}
-                onClick={handleDelete} />
+                <Icon
+                  IconName={MdDelete}
+                  loading={loading}
+                  onClick={handleDelete}
+                  size={16}
+                />
               </div>
             </div>
           </div>
