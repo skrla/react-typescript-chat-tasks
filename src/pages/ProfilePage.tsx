@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import avatarGenerator from "../utils/avatarGenerator";
+import { toastErr, toastWarn } from "../utils/toast";
+import { BE_deleteAccount, BE_saveProfile } from "../backend/userQueries";
 
 function ProfilePage() {
   const [email, setEmail] = useState("");
@@ -11,6 +13,7 @@ function ProfilePage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const dispatch = useDispatch<AppDispatch>();
@@ -23,6 +26,46 @@ function ProfilePage() {
 
   const handleAvatarGenerate = () => {
     setAvatar(avatarGenerator());
+  };
+
+  const handleSaveProfile = async () => {
+    if (!email || !username) toastErr("Email or username can't be empty");
+
+    let temp_pass = password;
+    if (temp_pass && temp_pass !== confirmPassword) {
+      toastErr("Password must match");
+      temp_pass = "";
+    }
+
+    let temp_email = email;
+    if (temp_email === currentUser.email) temp_email = "";
+
+    let temp_username = username;
+    if (temp_username === currentUser.username) temp_username = "";
+
+    let temp_avatar = avatar;
+    if (temp_avatar === currentUser.img) temp_avatar = "";
+
+    if (temp_email || temp_pass || temp_username || temp_avatar) {
+      await BE_saveProfile(dispatch, setLoading, {
+        email: temp_email,
+        username: temp_username,
+        password: temp_pass,
+        img: temp_avatar,
+      });
+    } else {
+      toastWarn("Change details before saving!");
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (
+      window.confirm(
+        `Are you sure to delete ${username}? This can't be reversed!`
+      )
+    ) {
+      await BE_deleteAccount(dispatch, setLoading);
+    }
   };
 
   return (
@@ -66,8 +109,17 @@ function ProfilePage() {
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
-        <Button text="Update Profile" />
-        <Button text="Delete Account" secondary />
+        <Button
+          text="Update Profile"
+          onClick={handleSaveProfile}
+          loading={loading}
+        />
+        <Button
+          text="Delete Account"
+          secondary
+          onClick={handleDeleteAccount}
+          loading={loading}
+        />
       </div>
     </div>
   );

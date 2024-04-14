@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from "../redux/store";
 import { BE_getTaskList } from "../backend/taskQueries";
 import { ListLoader } from "../components/Loaders";
 import FlipMove from "react-flip-move";
+import { auth } from "../backend/firebaseConfig";
 
 function ListPage() {
   const [loading, setLoading] = useState(false);
@@ -14,7 +15,7 @@ function ListPage() {
   );
 
   useEffect(() => {
-    BE_getTaskList(dispatch, setLoading);
+    if (auth.currentUser) BE_getTaskList(dispatch, setLoading);
   }, [dispatch]);
 
   return (

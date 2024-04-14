@@ -1,14 +1,18 @@
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   signInWithEmailAndPassword,
   signOut,
+  updateEmail,
+  updatePassword,
 } from "firebase/auth";
 import { auth, db } from "./firebaseConfig";
-import { toastErr } from "../utils/toast";
+import { toastErr, toastSucc } from "../utils/toast";
 import catchErr from "../utils/catchErr";
 import { AuthDataType, SetLoadingType, UserType } from "../types";
 import { NavigateFunction } from "react-router";
 import {
+  deleteDoc,
   doc,
   getDoc,
   serverTimestamp,
@@ -19,6 +23,7 @@ import { defaultUser, setUser, userStorageInfo } from "../redux/userSlice";
 import { AppDispatch } from "../redux/store";
 import convertTime from "../utils/convertTime";
 import avatarGenerator from "../utils/avatarGenerator";
+import { BE_deleteTaskList, getAllTaskList } from "./taskQueries";
 
 const userColl = "users";
 const chatColl = "chat";
@@ -114,6 +119,83 @@ export const BE_signOut = async (
     .catch((err) => catchErr(err));
 };
 
+export const getStorageUser = () => {
+  const user = localStorage.getItem(userStorageInfo);
+  if (user) return JSON.parse(user);
+  else return null;
+};
+
+export const BE_saveProfile = async (
+  dispatch: AppDispatch,
+  setLoading: SetLoadingType,
+  data: { email: string; username: string; password: string; img: string }
+) => {
+  setLoading(true);
+  const { email, username, password, img } = data;
+  const id = getStorageUser().id;
+
+  if (id && auth.currentUser) {
+    if (email) {
+      updateEmail(auth.currentUser, email)
+        .then(async () => {
+          await updateUserInfo({ email });
+          toastSucc("Email updated successfully");
+        })
+        .catch((err) => catchErr(err));
+    }
+
+    if (password) {
+      updatePassword(auth.currentUser, password)
+        .then(() => {
+          toastSucc("Password updated successfully");
+        })
+        .catch((err) => catchErr(err));
+    }
+
+    if (username || img) {
+      await updateUserInfo({ username, img });
+      toastSucc("Updated profile successfully!");
+    }
+
+    const userInfo = await getUserInfo(id);
+
+    dispatch(setUser(userInfo));
+    setLoading(false);
+  } else {
+    toastErr("BE_saveProfile: id not found");
+    setLoading(false);
+  }
+};
+
+export const BE_deleteAccount = async (
+  dispatch: AppDispatch,
+  setLoading: SetLoadingType
+) => {
+  setLoading(true);
+
+  const userTaskList = await getAllTaskList();
+
+  if (userTaskList.length > 0) {
+    userTaskList.forEach(async (e) => {
+      if (e.id && e.tasks) await BE_deleteTaskList(e.id, e.tasks, dispatch);
+    });
+  }
+
+  await deleteDoc(doc(db, userColl, getStorageUser().id));
+
+  const user = auth.currentUser;
+
+  if (user) {
+    deleteUser(user)
+      .then(async () => {
+        localStorage.removeItem(userStorageInfo);
+        setLoading(false);
+        window.location.reload();
+      })
+      .catch((error) => catchErr(error));
+  }
+};
+
 const addUserToCollection = async (
   id: string,
   email: string,
@@ -159,24 +241,20 @@ const getUserInfo = async (id: string): Promise<UserType> => {
   };
 };
 
-export const getStorageUser = () => {
-  const user = localStorage.getItem(userStorageInfo);
-  if (user) return JSON.parse(user);
-  else return null;
-};
-
 const updateUserInfo = async ({
   id,
   username,
   img,
   isOnline,
   isOffline,
+  email,
 }: {
   id?: string;
   username?: string;
   img?: string;
   isOnline?: boolean;
   isOffline?: boolean;
+  email?: string;
 }) => {
   if (!id) {
     id = getStorageUser().id;
@@ -186,6 +264,7 @@ const updateUserInfo = async ({
     const docRef = doc(db, userColl, id);
     await updateDoc(docRef, {
       ...(username && { username }),
+      ...(email && { email }),
       ...(isOnline && { isOnline }),
       ...(isOffline && { isOnline: false }),
       ...(img && { img }),

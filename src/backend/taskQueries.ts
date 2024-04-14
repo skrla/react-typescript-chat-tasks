@@ -97,15 +97,15 @@ export const BE_deleteTaskList = async (
   listId: string,
   tasks: TaskType[],
   dispatch: AppDispatch,
-  setLoading: SetLoadingType
+  setLoading?: SetLoadingType
 ) => {
-  setLoading(true);
+   if(setLoading) setLoading(true);
 
   if (tasks.length > 0) {
     //TODO probati sa foreach
     for (let i = 0; i < tasks.length; i++) {
       const { id } = tasks[i];
-      if (id) BE_deleteTask(listId, id, dispatch, setLoading);
+      if (id) BE_deleteTask(listId, id, dispatch);
     }
   }
 
@@ -116,7 +116,7 @@ export const BE_deleteTaskList = async (
   const deletedTaskList = await getDoc(listRef);
 
   if (!deletedTaskList.exists()) {
-    setLoading(false);
+    if(setLoading) setLoading(false);
     dispatch(deleteTaskList(listId));
   }
 };
@@ -225,7 +225,7 @@ export const BE_saveTask = async (
   }
 };
 
-const getAllTaskList = async () => {
+export const getAllTaskList = async () => {
   const q = query(
     collection(db, taskListColl),
     where("userId", "==", getStorageUser().id)
