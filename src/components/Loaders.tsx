@@ -23,9 +23,33 @@ function SingleListLoader() {
 }
 
 export function TaskListLoader() {
-  return <div className="animate-pulse flex-1 space-y-3 p-4 pb-10">
-    <div className="h-2 bg-gray-300 rounded"></div>
-    <div className="h-2 bg-gray-300 rounded"></div>
-    <div className="h-2 bg-gray-300 rounded"></div>
-  </div>;
+  return (
+    <div className="animate-pulse flex-1 space-y-3 p-4 pb-10">
+      <div className="h-2 bg-gray-300 rounded"></div>
+      <div className="h-2 bg-gray-300 rounded"></div>
+      <div className="h-2 bg-gray-300 rounded"></div>
+    </div>
+  );
+}
+
+export function UsersLoader() {
+  return (
+    <div className="flex flex-col">
+      {[1, 2, 3, 4, 5, 6, 7, 8].map((e) => (
+        <UserLoader key={e} />
+      ))}
+    </div>
+  );
+}
+
+function UserLoader() {
+  return (
+    <div className="animate-pulse flex gap-2 items-center px-5 py-3 border-b-[1px] border-gray-200">
+      <div className="w-11 h-11 rounded-full bg-gray-300"></div>
+      <div className="flex flex-col gap-2 w-full">
+        <div className="bg-gray-300 h-3 rounded-md"></div>
+        <div className="bg-gray-300 h-3 rounded-md"></div>
+      </div>
+    </div>
+  );
 }

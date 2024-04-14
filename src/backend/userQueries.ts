@@ -237,6 +237,7 @@ export const BE_getAllUsers = async (
       });
     });
 
+    console.log(users);
     dispatch(setUsers(users));
     setLoading(false);
   });
