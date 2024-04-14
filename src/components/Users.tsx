@@ -1,6 +1,10 @@
 import React from 'react'
 
-function Users() {
+type UsersProps = {
+  loading: boolean,
+}
+
+function Users({loading}: UsersProps) {
   return (
     <div>
       

@@ -12,14 +12,25 @@ import catchErr from "../utils/catchErr";
 import { AuthDataType, SetLoadingType, UserType } from "../types";
 import { NavigateFunction } from "react-router";
 import {
+  collection,
   deleteDoc,
   doc,
+  documentId,
   getDoc,
+  onSnapshot,
+  orderBy,
+  query,
   serverTimestamp,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
-import { defaultUser, setUser, userStorageInfo } from "../redux/userSlice";
+import {
+  defaultUser,
+  setUser,
+  setUsers,
+  userStorageInfo,
+} from "../redux/userSlice";
 import { AppDispatch } from "../redux/store";
 import convertTime from "../utils/convertTime";
 import avatarGenerator from "../utils/avatarGenerator";
@@ -194,6 +205,41 @@ export const BE_deleteAccount = async (
       })
       .catch((error) => catchErr(error));
   }
+};
+
+export const BE_getAllUsers = async (
+  dispatch: AppDispatch,
+  setLoading: SetLoadingType
+) => {
+  setLoading(true);
+
+  const q = query(
+    collection(db, userColl),
+    where(documentId(), "!=", getStorageUser().id),
+    orderBy("isOnline", "desc")
+  );
+
+  onSnapshot(q, (usersSnapshot) => {
+    let users: UserType[] = [];
+
+    usersSnapshot.forEach((user) => {
+      const { img, isOnline, username, email, bio, creationTime, lastSeen } =
+        user.data();
+      users.push({
+        id: user.id,
+        img,
+        isOnline,
+        username,
+        email,
+        bio,
+        creationTime: convertTime(creationTime.toDate()),
+        lastSeen: convertTime(lastSeen.toDate()),
+      });
+    });
+
+    dispatch(setUsers(users));
+    setLoading(false);
+  });
 };
 
 const addUserToCollection = async (

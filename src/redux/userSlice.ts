@@ -15,7 +15,7 @@ export const defaultUser: UserType = {
 export const userStorageInfo = "chatTasksUser";
 
 const initialState = {
-  user: [],
+  users: [],
   currentUser: defaultUser,
   currentSelectedUser: null,
 };
@@ -29,7 +29,9 @@ const userSlice = createSlice({
       localStorage.setItem(userStorageInfo, JSON.stringify(user));
       state.currentUser = action.payload;
     },
-    setUsers: (state, action) => {},
+    setUsers: (state, action) => {
+      state.users = action.payload;
+    },
   },
 });
 
