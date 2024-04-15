@@ -46,6 +46,11 @@ function Header({}: HeaderProps) {
     navigate("/auth");
   }, [navigate, user?.id, dispatch]);
 
+  useEffect(() => {
+    const currentPage = getCurrentPage();
+    if (currentPage) handleNavigate(currentPage);
+  }, []);
+
   return (
     <div className="flex items-center flex-wrap z-10 sm:flex-row gap-5 justify-between bg-gradient-to-r from-myBlue to-myPink px-5 py-5 md:py-2 text-white drop-shadow-md">
       <img

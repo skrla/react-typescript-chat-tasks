@@ -20,7 +20,7 @@ function SideBarUsers() {
   }, [])
 
   return (
-    <SideBar className={`flex-[0.8] absolute z-10 w-[80%] h-[80%] md:h-full md:w-full md:relative md:z-0 lg:flex-[0.3]`}>
+    <SideBar className={`flex-[0.8] absolute z-10 w-[80%] h-[80%] md:h-full md:w-full md:relative md:z-0`}>
       <div className="flex flex-col">
         <div className="flex sticky top-0 z-10">
           <p
