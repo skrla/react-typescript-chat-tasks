@@ -15,7 +15,7 @@ export const defaultUser: UserType = {
 export const userStorageInfo = "chatTasksUser";
 
 const initialState = {
-  users: [],
+  users: [] as UserType[],
   currentUser: defaultUser,
   currentSelectedUser: null,
 };
