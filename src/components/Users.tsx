@@ -16,7 +16,6 @@ function Users({ loading }: UsersProps) {
 
   const handleStartChat = (receiverId: string, receiverName: string) => {
     dispatch(setAlertProps({ open: true, receiverId, receiverName }));
-    alert("Start chat");
   };
 
   return loading ? (

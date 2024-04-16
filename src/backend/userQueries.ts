@@ -12,12 +12,16 @@ import catchErr from "../utils/catchErr";
 import { AuthDataType, SetLoadingType, UserType } from "../types";
 import { NavigateFunction } from "react-router";
 import {
+  addDoc,
+  and,
   collection,
   deleteDoc,
   doc,
   documentId,
   getDoc,
+  getDocs,
   onSnapshot,
+  or,
   orderBy,
   query,
   serverTimestamp,
@@ -241,6 +245,47 @@ export const BE_getAllUsers = async (
     dispatch(setUsers(users));
     setLoading(false);
   });
+};
+
+export const BE_startChat = async (
+  dispatch: AppDispatch,
+  setLoading: SetLoadingType,
+  receiverId: string,
+  receiverName: string
+) => {
+  setLoading(true);
+
+  const sId = getStorageUser().id;
+
+  const q = query(
+    collection(db, chatColl),
+    or(
+      and(where("senderId", "==", sId), where("receiverId", "==", receiverId)),
+      and(where("senderId", "==", receiverId), where("receiverId", "==", sId))
+    )
+  );
+
+  const res = await getDocs(q);
+
+  if (res.empty) {
+    const newChat = await addDoc(collection(db, chatColl), {
+      senderId: sId,
+      receiverId: receiverId,
+      lastMsg: "",
+      updatedAt: serverTimestamp(),
+      senderToReceiverNewMsgCount: 0,
+      receiverToSenderNewMsgCount: 0,
+    });
+
+    const newChatSnapshot = await getDoc(doc(db, newChat.path));
+    if (!newChatSnapshot.exists()) {
+      toastErr("BE_startChat: No such document!");
+    }
+  } else {
+    toastErr(`You already started chatting with ${receiverName}`);
+  }
+
+  setLoading(false);
 };
 
 const addUserToCollection = async (

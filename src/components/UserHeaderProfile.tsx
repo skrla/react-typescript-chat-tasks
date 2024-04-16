@@ -34,7 +34,11 @@ const UserHeaderProfile = forwardRef(
                 : "ring-white"
             }`}
           />
-          <span className="-top-1 -right-1 absolute w-4 h-4 border-2 border-gray-800 rounded-full bg-green-400"></span>
+          <span
+            className={`-top-1 -right-1 absolute w-4 h-4 border-2 border-gray-800 rounded-full ${
+              user.isOnline ? "bg-green-400" : "bg-gray-400"
+            } `}
+          ></span>
         </div>
         <div className={`${!otherUser && "hidden md:block"}`}>
           <div className="-mb-1">{user.username}</div>
