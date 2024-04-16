@@ -1,16 +1,40 @@
 import React from "react";
 import Button from "./Button";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
+import { setAlertProps } from "../redux/userSlice";
 
 export default function Alert() {
+  const { open, receiverId, receiverName } = useSelector(
+    (state: RootState) => state.user.alertProps
+  );
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleStartChatting = () => {
+    
+  };
+
   return (
-    <div className="hidden fixed top-0 z-50 h-full w-full">
+    <div
+      className={`fixed top-0 z-50 h-full w-full ${open ? "block" : "hidden"}`}
+    >
       <div className="w-full h-full flex justify-center items-center">
         <div className="bg-white border-8 min-w-[90%] md:min-w-[500px] rounded-[30px] z-30 p-10 flex flex-col">
           <div className="flex-1 mb-5">
-            <p>Start chatting with user</p>
+            <p>Start chatting with {receiverName}?</p>
           </div>
           <div className="flex justify-end gap-5">
-            <Button text="Cancel" secondary />
+            <Button
+              onClick={() =>
+                dispatch(
+                  setAlertProps({
+                    open: false,
+                  })
+                )
+              }
+              text="Cancel"
+              secondary
+            />
             <Button text="Sure" />
           </div>
         </div>

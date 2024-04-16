@@ -14,10 +14,26 @@ export const defaultUser: UserType = {
 
 export const userStorageInfo = "chatTasksUser";
 
-const initialState = {
-  users: [] as UserType[],
+type InitialStateUserType = {
+  users: UserType[];
+  currentUser: UserType;
+  currentSelectedUser: null;
+  alertProps: {
+    open: boolean;
+    receiverId?: string;
+    receiverName?: string;
+  };
+};
+
+const initialState: InitialStateUserType = {
+  users: [],
   currentUser: defaultUser,
   currentSelectedUser: null,
+  alertProps: {
+    open: false,
+    receiverId: "",
+    receiverName: "",
+  },
 };
 
 const userSlice = createSlice({
@@ -32,9 +48,13 @@ const userSlice = createSlice({
     setUsers: (state, action) => {
       state.users = action.payload;
     },
+    setAlertProps: (state, action) => {
+      const { open, receiverId, receiverName } = action.payload;
+      state.alertProps = action.payload;
+    },
   },
 });
 
-export const { setUser, setUsers } = userSlice.actions;
+export const { setUser, setUsers, setAlertProps } = userSlice.actions;
 
 export default userSlice.reducer;
