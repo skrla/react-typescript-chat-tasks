@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { BE_signOut, getStorageUser } from "../backend/userQueries";
 import Spinner from "./Spinner";
 import { setUser } from "../redux/userSlice";
+import { BE_getChats } from "../backend/chatQueries";
 const logo = require("../assets/logo.png");
 
 type HeaderProps = {};
@@ -44,11 +45,18 @@ function Header({}: HeaderProps) {
       return;
     }
     navigate("/auth");
-  }, [navigate, user?.id, dispatch]);
+  }, [navigate, dispatch]);
 
   useEffect(() => {
     const currentPage = getCurrentPage();
     if (currentPage) handleNavigate(currentPage);
+  }, []);
+
+  useEffect(() => {
+    const get = async () => {
+      await BE_getChats(dispatch);
+    };
+    get();
   }, []);
 
   return (

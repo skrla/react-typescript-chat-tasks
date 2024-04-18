@@ -19,6 +19,7 @@ import { db } from "./firebaseConfig";
 import { toastErr } from "../utils/toast";
 import { setAlertProps } from "../redux/userSlice";
 import { setChats } from "../redux/chatSlice";
+import convertTime from "../utils/convertTime";
 
 const chatColl = "chats";
 
@@ -90,7 +91,7 @@ export const BE_getChats = async (dispatch: AppDispatch) => {
         senderId,
         receiverId,
         lastMsg,
-        updatedAt,
+        updatedAt: updatedAt ? convertTime(updatedAt.toDate()) : "No date",
         receiverToSenderNewMsgCount,
         senderToReceiverNewMsgCount,
       });
@@ -98,4 +99,8 @@ export const BE_getChats = async (dispatch: AppDispatch) => {
 
     dispatch(setChats(chats));
   });
+};
+
+export const iCreatedChat = (senderId: string) => {
+  return getStorageUser().id === senderId;
 };

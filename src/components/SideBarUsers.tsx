@@ -13,14 +13,16 @@ function SideBarUsers() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const get = async() => {
-      await BE_getAllUsers(dispatch, setLoading)
-    }
-    get()
-  }, [])
+    const get = async () => {
+      await BE_getAllUsers(dispatch, setLoading);
+    };
+    get();
+  }, []);
 
   return (
-    <SideBar className={`flex-[0.8] absolute z-10 w-[80%] h-[80%] md:h-full md:w-full md:relative md:z-0`}>
+    <SideBar
+      className={`flex-[0.8] absolute z-10 w-[80%] h-[80%] md:h-full md:w-full md:relative md:z-0`}
+    >
       <div className="flex flex-col">
         <div className="flex sticky top-0 z-10">
           <p
@@ -44,7 +46,9 @@ function SideBarUsers() {
             Users
           </p>
         </div>
-        <div className="flex flex-1 flex-col py-2 max-h-full overflow-y-scroll">{isChatsTab ? <Chats /> : <Users loading={loading} />}</div>
+        <div className="flex flex-1 flex-col py-2 max-h-full overflow-y-scroll">
+          {isChatsTab ? <Chats /> : <Users loading={loading} />}
+        </div>
       </div>
     </SideBar>
   );

@@ -234,16 +234,48 @@ export const BE_getAllUsers = async (
         creationTime: creationTime
           ? convertTime(creationTime.toDate())
           : "No time yet.",
-        lastSeen: lastSeen ? convertTime(lastSeen) : "No time yet.",
+        lastSeen: lastSeen ? convertTime(lastSeen.toDate()) : "No time yet.",
       });
     });
 
-    console.log(users);
     dispatch(setUsers(users));
     setLoading(false);
   });
 };
 
+export const getUserInfo = async (
+  id: string,
+  setLoading?: SetLoadingType
+): Promise<UserType> => {
+  if (setLoading) setLoading(true);
+
+  const docRef = doc(db, userColl, id);
+  const user = await getDoc(docRef);
+
+  if (!user.exists()) {
+    toastErr("User not found");
+    if (setLoading) setLoading(false);
+    return defaultUser;
+  }
+
+  const { img, isOnline, username, email, bio, creationTime, lastSeen } =
+    user.data();
+  if (setLoading) setLoading(false);
+  return {
+    id: user.id,
+    img,
+    isOnline,
+    username,
+    email,
+    bio,
+    creationTime: creationTime
+      ? convertTime(creationTime.toDate())
+      : "No date yet: userinfo",
+    lastSeen: lastSeen
+      ? convertTime(lastSeen.toDate())
+      : "No date yet: userinfo",
+  };
+};
 
 const addUserToCollection = async (
   id: string,
@@ -261,33 +293,6 @@ const addUserToCollection = async (
     bio: "",
   });
   return getUserInfo(id);
-};
-
-const getUserInfo = async (id: string): Promise<UserType> => {
-  const docRef = doc(db, userColl, id);
-  const user = await getDoc(docRef);
-
-  if (!user.exists()) {
-    toastErr("User not found");
-    return defaultUser;
-  }
-
-  const { img, isOnline, username, email, bio, creationTime, lastSeen } =
-    user.data();
-  return {
-    id: user.id,
-    img,
-    isOnline,
-    username,
-    email,
-    bio,
-    creationTime: creationTime
-      ? convertTime(creationTime.toDate())
-      : "No date yet: userinfo",
-    lastSeen: lastSeen
-      ? convertTime(lastSeen.toDate())
-      : "No date yet: userinfo",
-  };
 };
 
 const updateUserInfo = async ({
