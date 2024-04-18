@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "./Button";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { setAlertProps } from "../redux/userSlice";
+import { BE_startChat } from "../backend/chatQueries";
 
 export default function Alert() {
   const { open, receiverId, receiverName } = useSelector(
     (state: RootState) => state.user.alertProps
   );
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleStartChatting = () => {
-    
+    if(receiverId && receiverName) BE_startChat(dispatch, setLoading, receiverId, receiverName);
   };
 
   return (
@@ -35,7 +37,11 @@ export default function Alert() {
               text="Cancel"
               secondary
             />
-            <Button text="Sure" />
+            <Button
+              text="Sure"
+              loading={loading}
+              onClick={handleStartChatting}
+            />
           </div>
         </div>
         <div className="bg-black backdrop-blur-[2px] opacity-30 h-full w-full absolute z-20"></div>

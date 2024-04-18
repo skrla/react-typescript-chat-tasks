@@ -1,3 +1,5 @@
+import { Id } from "react-toastify";
+
 export type SetLoadingType = React.Dispatch<React.SetStateAction<boolean>>;
 export type AuthDataType = {
   email: string;
@@ -29,4 +31,21 @@ export type TaskType = {
   description?: string;
   editMode?: boolean;
   collapsed?: boolean;
+};
+
+export type ChatType = {
+  senderId: string;
+  receiverId: string;
+  id?: string;
+  lastMsg?: string;
+  senderToReceiverNewMsgCount?: number;
+  receiverToSenderNewMsgCount?: number;
+  updatedAt?: string;
+};
+
+export type MessageType = {
+  senderId: string;
+  content: string;
+  createdAt?: string;
+  id?: string;
 };
