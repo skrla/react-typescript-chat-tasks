@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { ChatType, UserType } from "../types";
 import { getUserInfo } from "../backend/userQueries";
 import UserHeaderProfile from "./UserHeaderProfile";
+import { defaultUser } from "../redux/userSlice";
+import { iCreatedChat } from "../backend/chatQueries";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
+import { setCurrentChat } from "../redux/chatSlice";
 
 type ChatsProfileType = {
   userId?: string;
@@ -10,9 +15,29 @@ type ChatsProfileType = {
 
 function ChatsProfile({ userId, chat }: ChatsProfileType) {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<UserType>();
+  const [user, setUser] = useState<UserType>(defaultUser);
+  const dispatch = useDispatch<AppDispatch>();
+  const currentSelectedChat = useSelector(
+    (state: RootState) => state.chat.currentSelectedChat
+  );
+  const {
+    id,
+    senderId,
+    lastMsg,
+    receiverToSenderNewMsgCount,
+    senderToReceiverNewMsgCount,
+  } = chat;
 
-  const handleSelectedChat = () => {};
+  const handleSelectedChat = () => {
+    dispatch(
+      setCurrentChat({
+        ...user,
+        chatId: id,
+        receiverToSenderNewMsgCount,
+        senderToReceiverNewMsgCount,
+      })
+    );
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -26,15 +51,21 @@ function ChatsProfile({ userId, chat }: ChatsProfileType) {
     getUser();
   }, [userId]);
 
-  return user ? (
+  return (
     <UserHeaderProfile
       key={userId}
       user={user}
       otherUser
-      onClick={() => handleSelectedChat()}
+      loading={loading}
+      lastMsg={lastMsg}
+      onClick={handleSelectedChat}
+      isSelected={userId === currentSelectedChat.id}
+      newMsgCount={
+        iCreatedChat(senderId)
+          ? receiverToSenderNewMsgCount
+          : senderToReceiverNewMsgCount
+      }
     />
-  ) : (
-    <h2>User</h2>
   );
 }
 

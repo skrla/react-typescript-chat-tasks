@@ -1,9 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
-import { UsersLoader } from "./Loaders";
 import FlipMove from "react-flip-move";
-import UserHeaderProfile from "./UserHeaderProfile";
 import ChatsProfile from "./ChatsProfile";
 import { iCreatedChat } from "../backend/chatQueries";
 
