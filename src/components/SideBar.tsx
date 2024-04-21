@@ -9,7 +9,7 @@ type SideBarProps = {
 function SideBar({ children, isRight, className }: SideBarProps) {
   return (
     <div
-      className={`bg-white shadow-md border-2 lg:flex-[0.3] ${
+      className={`bg-white transition duration-150 ease-in-out shadow-md border-2 lg:flex-[0.3] ${
         isRight ? "rounded-r-3xl" : "rounded-l-3xl"
       } ${className}`}
     >

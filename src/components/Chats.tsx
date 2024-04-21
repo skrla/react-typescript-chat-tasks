@@ -7,7 +7,6 @@ import { iCreatedChat } from "../backend/chatQueries";
 
 function Chats() {
   const chats = useSelector((state: RootState) => state.chat.chats);
-  const dispatch = useDispatch<AppDispatch>();
 
   return chats.length === 0 ? (
     <div className="p-10">

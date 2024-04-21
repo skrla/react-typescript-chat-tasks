@@ -6,7 +6,7 @@ import { defaultUser } from "../redux/userSlice";
 import { iCreatedChat } from "../backend/chatQueries";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
-import { setCurrentChat } from "../redux/chatSlice";
+import { setCurrentChat, setOpen } from "../redux/chatSlice";
 
 type ChatsProfileType = {
   userId?: string;
@@ -37,6 +37,7 @@ function ChatsProfile({ userId, chat }: ChatsProfileType) {
         senderToReceiverNewMsgCount,
       })
     );
+    dispatch(setOpen());
   };
 
   useEffect(() => {

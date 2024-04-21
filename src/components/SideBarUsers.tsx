@@ -12,6 +12,7 @@ function SideBarUsers() {
   const isChatsTab = useSelector((state: RootState) => state.chat.isChatTab);
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
+  const open = useSelector((state: RootState) => state.chat.open);
 
   const handleSelectedUsers = () => {
     dispatch(setIsChatsTab(false));
@@ -27,7 +28,9 @@ function SideBarUsers() {
 
   return (
     <SideBar
-      className={`flex-[0.8] absolute z-10 w-[80%] h-[80%] md:h-full md:w-full md:relative md:z-0`}
+      className={`flex-[0.8] absolute z-10 w-[80%] h-[80%] md:h-full md:w-full md:relative md:z-0 ${
+        open ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+      }`}
     >
       <div className="flex flex-col">
         <div className="flex sticky top-0 z-10">
