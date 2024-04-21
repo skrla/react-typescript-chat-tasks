@@ -1,6 +1,7 @@
 import React, { forwardRef } from "react";
 import { UserType } from "../types";
 import { UsersLoader } from "./Loaders";
+import truncate from "../utils/truncateText";
 
 type Props = {
   user: UserType;
@@ -42,7 +43,7 @@ const UserHeaderProfile = forwardRef(
               otherUser
                 ? "ring-gray-300 group-hover:ring-gray-400"
                 : "ring-white"
-            } ${isSelected && 'ring-gray-400'}`}
+            } ${isSelected && "ring-gray-400"}`}
           />
           <span
             className={`-top-1 -right-1 absolute w-4 h-4 border-2 border-gray-800 rounded-full ${
@@ -55,7 +56,7 @@ const UserHeaderProfile = forwardRef(
             className={`-mb-1 flex items-center gap-2 ${
               otherUser && "text-gray-600 group-hover:text-gray-900"
             }
-            ${isSelected && 'text-gray-900'}`}
+            ${isSelected && "text-gray-900"}`}
           >
             {user.username}
             {newMsgCount && newMsgCount > 0 ? (
@@ -72,10 +73,10 @@ const UserHeaderProfile = forwardRef(
                 ? "text-gray-400 group-hover:text-gray-500"
                 : "text-gray-300"
             }
-            ${isSelected && 'text-gray-500'}`}
+            ${isSelected && "text-gray-500"}`}
           >
             {otherUser
-              ? `${lastMsg ? `${lastMsg}` : "Last Seen: " + user.lastSeen}`
+              ? `${lastMsg ? truncate(lastMsg) : "Last Seen: " + user.lastSeen}`
               : `Joined in ${user.creationTime}`}
           </div>
         </div>
