@@ -19,7 +19,10 @@ import { getStorageUser, updateUserInfo } from "./userQueries";
 import { db } from "./firebaseConfig";
 import { toastErr } from "../utils/toast";
 import { setAlertProps } from "../redux/userSlice";
-import { setChats } from "../redux/chatSlice";
+import {
+  setChats,
+  setCurrentMessages,
+} from "../redux/chatSlice";
 import convertTime from "../utils/convertTime";
 
 const chatColl = "chats";
@@ -107,7 +110,37 @@ export const iCreatedChat = (senderId: string) => {
   return getStorageUser().id === senderId;
 };
 
-export const BE_getMsgs = async (dispatch: AppDispatch) => {};
+export const BE_getMsgs = async (
+  dispatch: AppDispatch,
+  chatId: string,
+  setLoading: SetLoadingType
+) => {
+  setLoading(true);
+
+  const q = query(
+    collection(db, chatColl, chatId, messagesColl),
+    orderBy("createdAt", "asc")
+  );
+
+  onSnapshot(q, (messagesSnapshot) => {
+    let msgs: MessageType[] = [];
+
+    messagesSnapshot.forEach((msg) => {
+      const { senderId, content, createdAt } = msg.data();
+      msgs.push({
+        id: msg.id,
+        senderId,
+        content,
+        createdAt: createdAt
+          ? convertTime(createdAt.toDate())
+          : "No time for created at!",
+      });
+    });
+
+    dispatch(setCurrentMessages(msgs));
+    setLoading(false);
+  });
+};
 
 export const BE_sendMsgs = async (
   chatId: string,

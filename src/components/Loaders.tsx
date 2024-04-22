@@ -53,3 +53,22 @@ function UserLoader() {
     </div>
   );
 }
+
+export function MessagesLoader() {
+  return (
+    <div className="flex flex-col">
+      {[1, 2, 3, 4, 5, 6].map((e) => (
+        <MessageLoader key={e} />
+      ))}
+    </div>
+  );
+}
+
+function MessageLoader() {
+  return (
+    <div className="animate-pulse flex flex-col gap-10">
+      <div className="bg-gray-200 h-12 w-full rounded-t-full rounded-br-full border-2 border-white self-start max-w-sm"></div>
+      <div className="bg-gray-200 h-12 w-full mb-5 rounded-t-full rounded-bl-full border-2 border-white self-end max-w-sm"></div>
+    </div>
+  );
+}

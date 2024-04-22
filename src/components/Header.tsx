@@ -13,10 +13,11 @@ import { setUser } from "../redux/userSlice";
 import { BE_getChats } from "../backend/chatQueries";
 const logo = require("../assets/logo.png");
 
-type HeaderProps = {};
-
-function Header({}: HeaderProps) {
+function Header() {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  const hasNewMessage = useSelector(
+    (state: RootState) => state.chat.hasNewMessage
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -54,7 +55,7 @@ function Header({}: HeaderProps) {
 
   useEffect(() => {
     const get = async () => {
-      await BE_getChats(dispatch);
+      if (user?.id) await BE_getChats(dispatch);
     };
     get();
   }, []);
@@ -84,7 +85,7 @@ function Header({}: HeaderProps) {
               IconName={BsFillChatFill}
               onClick={() => handleNavigate("chat")}
               reduceOpacityOnHover
-              ping
+              ping={hasNewMessage}
             />
           </>
         ) : (
@@ -94,7 +95,7 @@ function Header({}: HeaderProps) {
               reduceOpacityOnHover
               IconName={BsFillChatFill}
               onClick={() => handleNavigate("chat")}
-              ping
+              ping={hasNewMessage}
             />
           </>
         )}
