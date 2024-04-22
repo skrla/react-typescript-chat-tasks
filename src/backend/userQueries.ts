@@ -37,7 +37,6 @@ import avatarGenerator from "../utils/avatarGenerator";
 import { BE_deleteTaskList, getAllTaskList } from "./taskQueries";
 
 const userColl = "users";
-const messagesColl = "messages";
 
 export const BE_signUp = (
   data: AuthDataType,
@@ -295,7 +294,7 @@ const addUserToCollection = async (
   return getUserInfo(id);
 };
 
-const updateUserInfo = async ({
+export const updateUserInfo = async ({
   id,
   username,
   img,

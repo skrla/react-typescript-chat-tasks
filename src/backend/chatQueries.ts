@@ -10,11 +10,12 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { AppDispatch } from "../redux/store";
-import { ChatType, SetLoadingType } from "../types";
-import { getStorageUser } from "./userQueries";
+import { ChatType, MessageType, SetLoadingType } from "../types";
+import { getStorageUser, updateUserInfo } from "./userQueries";
 import { db } from "./firebaseConfig";
 import { toastErr } from "../utils/toast";
 import { setAlertProps } from "../redux/userSlice";
@@ -22,6 +23,7 @@ import { setChats } from "../redux/chatSlice";
 import convertTime from "../utils/convertTime";
 
 const chatColl = "chats";
+const messagesColl = "messages";
 
 export const BE_startChat = async (
   dispatch: AppDispatch,
@@ -103,4 +105,58 @@ export const BE_getChats = async (dispatch: AppDispatch) => {
 
 export const iCreatedChat = (senderId: string) => {
   return getStorageUser().id === senderId;
+};
+
+export const BE_getMsgs = async (dispatch: AppDispatch) => {};
+
+export const BE_sendMsgs = async (
+  chatId: string,
+  data: MessageType,
+  setLoading: SetLoadingType
+) => {
+  setLoading(true);
+
+  const res = await addDoc(collection(db, chatColl, chatId, messagesColl), {
+    ...data,
+    createdAt: serverTimestamp(),
+  });
+
+  const newMsg = await getDoc(doc(db, res.path));
+
+  if (newMsg.exists()) {
+    setLoading(false);
+    await updateNewMsgCount(chatId, true);
+    await updateLastMsg(chatId, newMsg.data().content);
+    await updateUserInfo({});
+  }
+};
+
+export const updateNewMsgCount = async (chatId: string, reset?: boolean) => {
+  const chat = await getDoc(doc(db, chatColl, chatId));
+
+  let senderToReceiverNewMsgCount = chat.data()?.senderToReceiverNewMsgCount;
+  let receiverToSenderNewMsgCount = chat.data()?.receiverToSenderNewMsgCount;
+
+  if (iCreatedChat(chat.data()?.senderId)) {
+    if (reset) receiverToSenderNewMsgCount = 0;
+    else senderToReceiverNewMsgCount++;
+  } else {
+    if (reset) senderToReceiverNewMsgCount = 0;
+    else receiverToSenderNewMsgCount++;
+  }
+
+  await updateDoc(doc(db, chatColl, chatId), {
+    updatedAt: serverTimestamp(),
+    senderToReceiverNewMsgCount,
+    receiverToSenderNewMsgCount,
+  });
+};
+
+const updateLastMsg = async (chatId: string, lastMsg: string) => {
+  await updateNewMsgCount(chatId);
+
+  await updateDoc(doc(db, chatColl, chatId), {
+    lastMsg,
+    updatedAt: serverTimestamp(),
+  });
 };
