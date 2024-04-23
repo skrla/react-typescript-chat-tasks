@@ -49,7 +49,6 @@ const userSlice = createSlice({
       state.users = action.payload;
     },
     setAlertProps: (state, action) => {
-      const { open, receiverId, receiverName } = action.payload;
       state.alertProps = action.payload;
     },
   },

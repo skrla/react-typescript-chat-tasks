@@ -36,7 +36,7 @@ function SideBarUsers() {
         <div className="flex sticky top-0 z-10">
           <p
             onClick={() => dispatch(setIsChatsTab(true))}
-            className={`p-5 flex-1 text-center font-bold cursor-pointer ${
+            className={`p-5 flex-1 text-center font-bold rounded-tl-3xl cursor-pointer ${
               isChatsTab
                 ? "bg-gradient-to-r from-myBlue to-myPink text-white"
                 : "bg-gray-200 text-gray-900"
