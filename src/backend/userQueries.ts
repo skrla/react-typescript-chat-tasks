@@ -276,24 +276,6 @@ export const getUserInfo = async (
   };
 };
 
-const addUserToCollection = async (
-  id: string,
-  email: string,
-  username: string,
-  img: string
-) => {
-  await setDoc(doc(db, userColl, id), {
-    isOnline: true,
-    img,
-    username,
-    email,
-    creationTime: serverTimestamp(),
-    lastSeen: serverTimestamp(),
-    bio: "",
-  });
-  return getUserInfo(id);
-};
-
 export const updateUserInfo = async ({
   id,
   username,
@@ -324,4 +306,22 @@ export const updateUserInfo = async ({
       lastSeen: serverTimestamp(),
     }).catch((err) => catchErr(err));
   }
+};
+
+const addUserToCollection = async (
+  id: string,
+  email: string,
+  username: string,
+  img: string
+) => {
+  await setDoc(doc(db, userColl, id), {
+    isOnline: true,
+    img,
+    username,
+    email,
+    creationTime: serverTimestamp(),
+    lastSeen: serverTimestamp(),
+    bio: "",
+  });
+  return getUserInfo(id);
 };

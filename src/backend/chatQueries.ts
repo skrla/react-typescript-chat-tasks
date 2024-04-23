@@ -19,10 +19,7 @@ import { getStorageUser, updateUserInfo } from "./userQueries";
 import { db } from "./firebaseConfig";
 import { toastErr } from "../utils/toast";
 import { setAlertProps } from "../redux/userSlice";
-import {
-  setChats,
-  setCurrentMessages,
-} from "../redux/chatSlice";
+import { setChats, setCurrentMessages } from "../redux/chatSlice";
 import convertTime from "../utils/convertTime";
 
 const chatColl = "chats";
@@ -49,7 +46,7 @@ export const BE_startChat = async (
   const res = await getDocs(q);
 
   if (res.empty) {
-    const newChat = await addDoc(collection(db, chatColl), {
+    await addDoc(collection(db, chatColl), {
       senderId: sId,
       receiverId: receiverId,
       lastMsg: "",
@@ -57,11 +54,6 @@ export const BE_startChat = async (
       senderToReceiverNewMsgCount: 0,
       receiverToSenderNewMsgCount: 0,
     });
-
-    const newChatSnapshot = await getDoc(doc(db, newChat.path));
-    if (!newChatSnapshot.exists()) {
-      toastErr("BE_startChat: No such document!");
-    }
   } else {
     toastErr(`You already started chatting with ${receiverName}`);
   }
@@ -154,17 +146,16 @@ export const BE_sendMsgs = async (
     createdAt: serverTimestamp(),
   });
 
-  const newMsg = await getDoc(doc(db, res.path));
-
-  if (newMsg.exists()) {
-    setLoading(false);
-    await updateNewMsgCount(chatId, true);
-    await updateLastMsg(chatId, newMsg.data().content);
-    await updateUserInfo({});
-  }
+  setLoading(false);
+  await updateNewMsgCount(chatId, true, data.content);
+  await updateUserInfo({});
 };
 
-export const updateNewMsgCount = async (chatId: string, reset?: boolean) => {
+export const updateNewMsgCount = async (
+  chatId: string,
+  reset?: boolean,
+  lastMsg?: string
+) => {
   const chat = await getDoc(doc(db, chatColl, chatId));
 
   let senderToReceiverNewMsgCount = chat.data()?.senderToReceiverNewMsgCount;
@@ -178,18 +169,18 @@ export const updateNewMsgCount = async (chatId: string, reset?: boolean) => {
     else receiverToSenderNewMsgCount++;
   }
 
-  await updateDoc(doc(db, chatColl, chatId), {
-    updatedAt: serverTimestamp(),
-    senderToReceiverNewMsgCount,
-    receiverToSenderNewMsgCount,
-  });
-};
-
-const updateLastMsg = async (chatId: string, lastMsg: string) => {
-  await updateNewMsgCount(chatId);
-
-  await updateDoc(doc(db, chatColl, chatId), {
-    lastMsg,
-    updatedAt: serverTimestamp(),
-  });
+  if (lastMsg?.trim()) {
+    await updateDoc(doc(db, chatColl, chatId), {
+      updatedAt: serverTimestamp(),
+      senderToReceiverNewMsgCount,
+      receiverToSenderNewMsgCount,
+      lastMsg,
+    });
+  } else {
+    await updateDoc(doc(db, chatColl, chatId), {
+      updatedAt: serverTimestamp(),
+      senderToReceiverNewMsgCount,
+      receiverToSenderNewMsgCount,
+    });
+  }
 };
