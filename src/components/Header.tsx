@@ -61,7 +61,7 @@ function Header() {
   }, []);
 
   return (
-    <div className="flex items-center flex-wrap z-10 sm:flex-row gap-5 justify-between bg-gradient-to-r from-myBlue to-myPink px-5 py-5 md:py-2 text-white drop-shadow-md">
+    <div className="flex items-center flex-wrap z-10 sm:flex-row gap-5 justify-between bg-gradient-to-r from-customGreen to-eggPlant px-5 py-5 md:py-2 text-white drop-shadow-md">
       <img
         src={logo}
         alt="Logo icon"

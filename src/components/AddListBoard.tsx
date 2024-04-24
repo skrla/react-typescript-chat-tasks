@@ -27,6 +27,7 @@ function AddListBoard() {
         className="block md:hidden"
         loading={loading}
         onClick={handleAddTaskList}
+        reduceOpacityOnHover
       />
     </>
   );

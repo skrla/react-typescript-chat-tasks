@@ -79,7 +79,7 @@ const SingleTaskList = forwardRef(
     return (
       <div ref={ref} className="relative">
         <div className="bg-[#d3f0f9] w-full md:w-[400px] drop-shadow-md rounded-md min-h-40 overflow-hidden">
-          <div className="flex flex-wrap items-center justify-center md:gap-10 bg-gradient-to-tr from-myBlue to-myPink bg-opacity-70 p-3 text-white text-center">
+          <div className="flex flex-wrap items-center justify-center md:gap-10 bg-gradient-to-tr from-customGreen to-eggPlant bg-opacity-70 p-3 text-white text-center">
             {editMode ? (
               <input
                 value={editTitle}

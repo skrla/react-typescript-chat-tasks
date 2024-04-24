@@ -16,11 +16,13 @@ import { MessagesLoader } from "./Loaders";
 import FlipMove from "react-flip-move";
 import { toastInfo } from "../utils/toast";
 import { getStorageUser } from "../backend/userQueries";
+import SingleMessage from "./SingleMessage";
 
 function ChatArea() {
   const bottomContainerRef = useRef<HTMLDivElement>(null);
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
+  const [newMessageLoading, setNewMessageLoading] = useState(false);
   const currentSelectedChat = useSelector(
     (state: RootState) => state.chat.currentSelectedChat
   );
@@ -37,7 +39,7 @@ function ChatArea() {
         content: msg,
       };
       setMsg("");
-      if (chatId) await BE_sendMsgs(chatId, data, setLoading);
+      if (chatId) await BE_sendMsgs(chatId, data, setNewMessageLoading);
       if (bottomContainerRef)
         bottomContainerRef.current?.scrollIntoView({ behavior: "smooth" });
     } else {
@@ -61,29 +63,15 @@ function ChatArea() {
       {loading && messages ? (
         <MessagesLoader />
       ) : (
-        <div className="flex-1 flex flex-col max-h-screen overflow-y-scroll shadow-inner gap-2">
+        <div className="flex-1 flex flex-col max-h-screen overflow-y-scroll no-scrollbar shadow-inner gap-2">
           <FlipMove className="flex flex-1 flex-col gap-5">
             {messages.map((e) => {
               if (iCreatedChat(e.senderId)) {
                 return (
-                  <div
-                    key={e.id}
-                    className="bg-gradient-to-r from-myBlue to-myPink text-white text-xs self-end max-w-md 
-        shadow-md py-3 px-10 rounded-t-full rounded-bl-full border-2 border-white"
-                  >
-                    {e.content}
-                  </div>
+                  <SingleMessage key={e.id} myMessage content={e.content} />
                 );
               } else {
-                return (
-                  <div
-                    key={e.id}
-                    className="bg-gray-300 text-xs self-start max-w-md 
-        shadow-md py-3 px-10 rounded-t-full rounded-br-full border-2 border-black"
-                  >
-                    {e.content}
-                  </div>
-                );
+                return <SingleMessage key={e.id} content={e.content} />;
               }
             })}
           </FlipMove>
@@ -109,7 +97,7 @@ function ChatArea() {
             name={`message to ${currentSelectedChat?.username}`}
             className="border-none outline-none text-sm md:text-[15px]"
             onKeyDown={checkEnter}
-            disabled={loading}
+            disabled={newMessageLoading}
           />
           <Icon
             IconName={ImAttachment}
@@ -126,7 +114,7 @@ function ChatArea() {
             IconName={BsFillSendFill}
             reduceOpacityOnHover
             onClick={handleSendMsg}
-            loading={loading}
+            loading={newMessageLoading}
           />
         </div>
       </div>

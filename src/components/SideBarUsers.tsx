@@ -28,17 +28,17 @@ function SideBarUsers() {
 
   return (
     <SideBar
-      className={`flex-[0.8] absolute z-10 w-[80%] h-[80%] md:h-full md:w-full md:relative md:z-0 ${
+      className={`flex-[0.8] absolute z-10 w-[80%] h-[80%] sm:bg-customBlack md:h-full md:w-full md:relative md:z-0 ${
         open ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       }`}
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col h-full">
         <div className="flex sticky top-0 z-10">
           <p
             onClick={() => dispatch(setIsChatsTab(true))}
             className={`p-5 flex-1 text-center font-bold rounded-tl-3xl cursor-pointer ${
               isChatsTab
-                ? "bg-gradient-to-r from-myBlue to-myPink text-white"
+                ? "bg-gradient-to-r from-customGreen to-eggPlant text-white"
                 : "bg-gray-200 text-gray-900"
             }`}
           >
@@ -48,14 +48,14 @@ function SideBarUsers() {
             onClick={handleSelectedUsers}
             className={`p-5 flex-1 text-center font-bold cursor-pointer ${
               !isChatsTab
-                ? "bg-gradient-to-r from-myBlue to-myPink text-white"
+                ? "bg-gradient-to-r from-customGreen to-eggPlant text-white"
                 : "bg-gray-200 text-gray-900"
             }`}
           >
             Users
           </p>
         </div>
-        <div className="flex flex-1 flex-col py-2 max-h-full overflow-y-scroll">
+        <div className="flex flex-1 flex-col py-2 max-h-full overflow-y-scroll no-scrollbar">
           {isChatsTab ? <Chats /> : <Users loading={loading} />}
         </div>
       </div>

@@ -52,7 +52,7 @@ const Task = forwardRef(
         <div>
           {editMode ? (
             <input
-              className="border-2 px-2 border-myBlue rounded-sm mb-1"
+              className="border-2 px-2 border-customGreen rounded-sm mb-1"
               placeholder="Task title"
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
@@ -74,7 +74,7 @@ const Task = forwardRef(
                 <textarea
                   value={editDescription}
                   placeholder="Add some description"
-                  className="w-full px-3 border-2 border-myBlue rounded-md mt-2"
+                  className="w-full px-3 border-2 border-customGreen rounded-md mt-2"
                   onChange={(e) => setEditDescription(e.target.value)}
                 />
               ) : (

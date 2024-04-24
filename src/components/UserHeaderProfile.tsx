@@ -30,10 +30,10 @@ const UserHeaderProfile = forwardRef(
       <div
         ref={ref}
         onClick={onClick}
-        className={`flex items-center justify-center space-x-4 cursor-pointer ${
+        className={`flex items-center justify-start space-x-4 cursor-pointer ${
           otherUser &&
-          "group px-5 py-3 hover:bg-gray-200 border-b-[1px] border-gray-200"
-        } ${isSelected && "bg-gray-200"}`}
+          "group px-5 py-3 hover:bg-customBlackHover border-b-[1px] border-gray-200"
+        } ${isSelected && "bg-customBlackHover"}`}
       >
         <div className="relative">
           <img
@@ -54,13 +54,13 @@ const UserHeaderProfile = forwardRef(
         <div className={`${!otherUser && "hidden md:block"}`}>
           <div
             className={`-mb-1 flex items-center gap-2 ${
-              otherUser && "text-gray-600 group-hover:text-gray-900"
+              otherUser && "text-white group-hover:text-gray-50"
             }
-            ${isSelected && "text-gray-900"}`}
+            ${isSelected && "text-gray-50"}`}
           >
             {user.username}
             {newMsgCount && newMsgCount > 0 ? (
-              <p className="bg-myPink w-auto min-w-[20px] max-w-[28px] h-5 p-1 rounded-full flex items-center justify-center text-white">
+              <p className="bg-eggPlant w-auto min-w-[20px] max-w-[28px] h-5 p-1 rounded-full flex items-center justify-center text-white">
                 {newMsgCount}
               </p>
             ) : (
@@ -70,10 +70,10 @@ const UserHeaderProfile = forwardRef(
           <div
             className={`text-sm  ${
               otherUser
-                ? "text-gray-400 group-hover:text-gray-500"
+                ? "text-gray-300 group-hover:text-gray-200"
                 : "text-gray-300"
             }
-            ${isSelected && "text-gray-500"}`}
+            ${isSelected && "text-gray-200"}`}
           >
             {otherUser
               ? `${lastMsg ? truncate(lastMsg) : "Last Seen: " + user.lastSeen}`

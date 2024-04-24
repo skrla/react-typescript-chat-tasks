@@ -10,8 +10,10 @@ module.exports = {
     },
     extend: {
       colors: {
-        myBlue: "#073B3A",
-        myPink: "#47003c",
+        customGreen: "#073B3A",
+        eggPlant: "#47003c",
+        customBlack: "#282828",
+        customBlackHover: "#3c3c3c",
       },
       backgroundImage: (theme) => ({
         pattern: "url('/src/assets/backgroundBlack.jpg')",
