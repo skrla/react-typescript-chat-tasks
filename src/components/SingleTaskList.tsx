@@ -19,6 +19,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { collapseAllTasks, editTaskListSwitch } from "../redux/taskListSlice";
 import { TaskListLoader } from "./Loaders";
+import { getStorageUser } from "../backend/userQueries";
 
 type SingleTaskListType = {
   singleTaskList: TaskListType;
@@ -61,7 +62,7 @@ const SingleTaskList = forwardRef(
     };
 
     useEffect(() => {
-      if (id) BE_getTasks(id, dispatch, setTasksLoading);
+      if (id && getStorageUser()) BE_getTasks(id, dispatch, setTasksLoading);
     }, [id, dispatch]);
 
     useEffect(() => {

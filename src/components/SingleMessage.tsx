@@ -1,24 +1,33 @@
+import { forwardRef } from "react";
+
 type SingleMessagePropsType = {
   content: string;
   myMessage?: boolean;
 };
 
-function SingleMessage({content, myMessage }: SingleMessagePropsType) {
-  return myMessage ? (
-    <div
-      className="bg-customGreen text-white text-xs self-end max-w-md 
+const SingleMessage = forwardRef(
+  (
+    { content, myMessage }: SingleMessagePropsType,
+    ref: React.LegacyRef<HTMLDivElement> | undefined
+  ) => {
+    return myMessage ? (
+      <div
+        ref={ref}
+        className="bg-customGreen text-white text-xs self-end max-w-md 
         shadow-md py-3 px-10 rounded-t-full rounded-bl-full border-2 border-white"
-    >
-      {content}
-    </div>
-  ) : (
-    <div
-      className="bg-eggPlant text-white text-xs self-start max-w-md 
+      >
+        {content}
+      </div>
+    ) : (
+      <div
+        ref={ref}
+        className="bg-eggPlant text-white text-xs self-start max-w-md 
         shadow-md py-3 px-10 rounded-t-full rounded-br-full border-2 border-white"
-    >
-      {content}
-    </div>
-  );
-}
+      >
+        {content}
+      </div>
+    );
+  }
+);
 
 export default SingleMessage;

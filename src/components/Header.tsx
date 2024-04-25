@@ -103,16 +103,16 @@ function Header() {
         <div className="group relative">
           <UserHeaderProfile user={currentUser} />
           <div className="absolute pt-5 hidden group-hover:block w-full min-w-max">
-            <ul className="w-full bg-white overflow-hidden rounded-md shadow-md text-gray-700 pt-1">
+            <ul className="w-full bg-customBlack overflow-hidden rounded-md shadow-md text-white pt-1">
               <p
                 onClick={() => handleNavigate("profile")}
-                className="hover:bg-gray-200 py-2 px-2 block cursor-pointer"
+                className="hover:bg-customBlackHover py-2 px-2 block cursor-pointer"
               >
                 Profile
               </p>
               <div
                 onClick={() => !loading && handleSingOut()}
-                className={`hover:bg-gray-200 py-2 px-2 cursor-pointer flex items-center gap-4 ${
+                className={`hover:bg-customBlackHover py-2 px-2 cursor-pointer flex items-center gap-4 ${
                   loading && "cursor-wait"
                 }`}
               >

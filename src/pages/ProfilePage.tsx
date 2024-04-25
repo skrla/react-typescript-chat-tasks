@@ -69,7 +69,7 @@ function ProfilePage() {
   };
 
   return (
-    <div className="bg-white flex flex-col gap-5 shadow-md max-w-2xl rounded-xl py-5 px-6 md:p-10 md:m-auto m-5 md:mt-10">
+    <div className="bg-customBlack flex flex-col gap-5 shadow-md max-w-2xl rounded-xl py-5 px-6 md:p-10 md:m-auto m-5 md:mt-10">
       <div className="relative self-center" onClick={handleAvatarGenerate}>
         <img
           src={avatar}
@@ -79,34 +79,38 @@ function ProfilePage() {
         <span className="absolute top-4 md:top-6 right-0 md:right-3 w-5 h-5 border-2 border-gray-800 rounded-full bg-green-400 z-20"></span>
       </div>
 
-      <p className="text-gray-400 text-sm text-center">
+      <p className="text-gray-200 text-sm text-center">
         Note: Click on image to temporary change it, when you like it, then save
         profile. You can leave password and username as they are if you don't
         want to change them
       </p>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 text-white">
         <Input
           name="email"
           value={email}
           onChange={(e) => setEmail(e.target.value.trim())}
+          className="hover:bg-customBlackHover focus:bg-customBlackHover"
         />
         <Input
           name="username"
           value={username}
           onChange={(e) => setUsername(e.target.value.trim())}
+          className="hover:bg-customBlackHover focus:bg-customBlackHover"
         />
         <Input
           name="password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="hover:bg-customBlackHover focus:bg-customBlackHover"
         />
         <Input
           name="confirm password"
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          className="hover:bg-customBlackHover focus:bg-customBlackHover"
         />
 
         <Button

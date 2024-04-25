@@ -12,10 +12,12 @@ function SideBarProfile() {
     currentSelectedChat;
 
   return (
-    <SideBar isRight className="hidden md:block">
-      <div className="flex flex-col">
-        <div className="bg-gray-200 h-16 sticky top-0 flex items-center justify-center">
-          {username && <p className="font-bold text-xl">{username}</p>}
+    <SideBar isRight className="hidden md:block ">
+      <div className="flex flex-col rounded-r-3xl">
+        <div className="bg-customBlackHover h-16 sticky m-4 flex items-center justify-center rounded-3xl">
+          {username && (
+            <p className="font-bold text-xl text-white">{username}</p>
+          )}
         </div>
         {id ? (
           <div className="flex p-10 flex-col">
@@ -31,22 +33,19 @@ function SideBarProfile() {
                 }`}
               ></span>
             </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-gray-400">
-                Username: <span className="text-gray-900">{username}</span>
-              </p>
+            <div className="flex flex-col gap-2 mt-10">
               <hr />
-              <p className="text-gray-400">
-                Email: <span className="text-gray-900">{email}</span>
+              <p className="text-gray-300">
+                Email: <span className="text-white">{email}</span>
               </p>
-              <p className="text-gray-400">
-                Joined in: <span className="text-gray-900">{creationTime}</span>
+              <p className="text-gray-300">
+                Joined in: <span className="text-white">{creationTime}</span>
               </p>
-              <p className="text-gray-400">
-                Last Seen: <span className="text-gray-900">{lastSeen}</span>
+              <p className="text-gray-300">
+                Last Seen: <span className="text-white">{lastSeen}</span>
               </p>
-              <p className="text-gray-400">
-                Bio: <span className="text-gray-900">{bio}</span>
+              <p className="text-gray-300">
+                Bio: <span className="text-white">{bio}</span>
               </p>
             </div>
           </div>

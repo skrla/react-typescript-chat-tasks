@@ -33,13 +33,13 @@ function SideBarUsers() {
       }`}
     >
       <div className="flex flex-col h-full">
-        <div className="flex sticky top-0 z-10">
+        <div className="flex sticky top-0 z-10 border-b-2 border-white">
           <p
             onClick={() => dispatch(setIsChatsTab(true))}
             className={`p-5 flex-1 text-center font-bold rounded-tl-3xl cursor-pointer ${
               isChatsTab
                 ? "bg-gradient-to-r from-customGreen to-eggPlant text-white"
-                : "bg-gray-200 text-gray-900"
+                : "bg-customBlackHover text-white"
             }`}
           >
             Chats
@@ -49,7 +49,7 @@ function SideBarUsers() {
             className={`p-5 flex-1 text-center font-bold cursor-pointer ${
               !isChatsTab
                 ? "bg-gradient-to-r from-customGreen to-eggPlant text-white"
-                : "bg-gray-200 text-gray-900"
+                : "bg-customBlackHover text-white"
             }`}
           >
             Users
