@@ -16,7 +16,7 @@ function Tasks({ tasks, listId }: TasksType) {
           <Task key={e.id} task={e} listId={listId} />
         ))}
       </FlipMove>
-      {tasks.length === 0 && <p className="text-center">No task added yet!</p>}
+      {tasks.length === 0 && <p className="text-center text-white">No task added yet!</p>}
     </div>
   );
 }

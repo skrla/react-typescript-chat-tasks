@@ -47,12 +47,12 @@ const Task = forwardRef(
     return (
       <div
         ref={ref}
-        className="bg-white p-2 mb-2 rounded-md drop-shadow-sm hover:drop-shadow-md"
+        className="bg-darkGreen text-white p-2 mb-2 rounded-md drop-shadow-sm hover:drop-shadow-md"
       >
         <div>
           {editMode ? (
             <input
-              className="border-2 px-2 border-customGreen rounded-sm mb-1"
+              className="border-2 px-2 border-white rounded-sm mb-1 bg-darkGreen focus:bg-richBlack active:bg-richBlack hover:bg-richBlack"
               placeholder="Task title"
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
@@ -74,7 +74,7 @@ const Task = forwardRef(
                 <textarea
                   value={editDescription}
                   placeholder="Add some description"
-                  className="w-full px-3 border-2 border-customGreen rounded-md mt-2"
+                  className="w-full px-3 border-2 border-white rounded-md mt-2 bg-darkGreen focus:bg-richBlack active:bg-richBlack hover:bg-richBlack"
                   onChange={(e) => setEditDescription(e.target.value)}
                 />
               ) : (

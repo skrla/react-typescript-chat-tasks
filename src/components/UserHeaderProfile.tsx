@@ -1,4 +1,3 @@
-import React, { forwardRef } from "react";
 import { UserType } from "../types";
 import { UsersLoader } from "./Loaders";
 import truncate from "../utils/truncateText";

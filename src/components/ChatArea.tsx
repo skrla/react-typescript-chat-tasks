@@ -56,7 +56,7 @@ function ChatArea() {
       if (chatId) await BE_getMsgs(dispatch, chatId, setLoading);
     };
     get();
-  }, [currentSelectedChat.id]);
+  }, [chatId, dispatch]);
 
   return (
     <div className="flex-1 lg:flex-[0.4] max-h-full flex flex-col px-2 md:px-5 gap-2">
@@ -79,7 +79,7 @@ function ChatArea() {
         </div>
       )}
       <div className="flex gap-1 md:gap-5">
-        <div className="bg-white p-[2px] flex-1 rounded-full shadow-md flex items-center gap-2 border-2 border-gray-300">
+        <div className="bg-customBlack p-[2px] flex-1 rounded-full shadow-md flex items-center gap-2 border-2 border-gray-300">
           <Icon
             IconName={BsFillPeopleFill}
             className="text-gray-500 block md:hidden"
@@ -89,23 +89,23 @@ function ChatArea() {
           />
           <Icon
             IconName={BsFillEmojiSunglassesFill}
-            className="text-gray-500 hidden md:block"
+            className="text-gray-200 hidden md:block"
           />
           <Input
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
             name={`message to ${currentSelectedChat?.username}`}
-            className="border-none outline-none text-sm md:text-[15px]"
+            className="border-none outline-none text-sm md:text-[15px] text-white"
             onKeyDown={checkEnter}
             disabled={newMessageLoading}
           />
           <Icon
             IconName={ImAttachment}
-            className="text-gray-500 hidden md:block rotate-90"
+            className="text-gray-200 hidden md:block rotate-90"
           />
           <Icon
             IconName={BsFillCameraFill}
-            className="text-gray-500 hidden md:block"
+            className="text-gray-200 hidden md:block"
           />
         </div>
 

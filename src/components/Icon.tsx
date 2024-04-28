@@ -28,7 +28,7 @@ function Icon({
       className={`relative p-3 rounded-full cursor-pointer hover:bg-customGreen transition-all ${
         reduceOpacityOnHover
           ? "bg-customGreen hover:bg-eggPlant text-white border-2 border-white hover:drop-shadow-lg"
-          : "hover:bg-opacity-30"
+          : "hover:bg-opacity-80"
       } ${loading && "cursor-wait"} ${className}`}
     >
       {loading ? <Spinner /> : <IconName size={size} />}

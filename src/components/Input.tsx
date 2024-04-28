@@ -27,7 +27,7 @@ const Input = ({
       onKeyDown={onKeyDown}
       disabled={disabled}
       placeholder={`Enter ${name}`}
-      className={`flex-1 placeholder-gray-300 bg-transparent border-2 border-gray-300 rounded-full px-3 py-1 ${className}`}
+      className={`flex-1 placeholder-gray-300 bg-transparent border-2 border-gray-100 hover:bg-customBlackHover focus:bg-customBlackHover text-white rounded-full px-3 py-1 ${className}`}
     />
   );
 };

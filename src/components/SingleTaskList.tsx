@@ -46,7 +46,6 @@ const SingleTaskList = forwardRef(
     };
 
     const handleDelete = () => {
-      //TODO napraviti da tasks ne budu opcionalni u typovima
       if (id && tasks) BE_deleteTaskList(id, tasks, dispatch, setLoading);
     };
 
@@ -79,7 +78,7 @@ const SingleTaskList = forwardRef(
 
     return (
       <div ref={ref} className="relative">
-        <div className="bg-[#d3f0f9] w-full md:w-[400px] drop-shadow-md rounded-md min-h-40 overflow-hidden">
+        <div className="bg-richBlack w-full md:w-[400px] drop-shadow-md rounded-md min-h-40 overflow-hidden">
           <div className="flex flex-wrap items-center justify-center md:gap-10 bg-gradient-to-tr from-customGreen to-eggPlant bg-opacity-70 p-3 text-white text-center">
             {editMode ? (
               <input
@@ -88,7 +87,7 @@ const SingleTaskList = forwardRef(
                 onChange={(e) => setEditTitle(e.target.value)}
                 placeholder="Enter task list title"
                 type="text"
-                className="flex-1 bg-transparent placeholder-gray-300 px-3 py-1 border-[1px] border-white rounded-md"
+                className="flex-1 bg-transparent placeholder-customBlack px-3 py-1 border-[1px] border-white rounded-md"
               />
             ) : (
               <p className="flex-1 text-left md:text-center">{title}</p>

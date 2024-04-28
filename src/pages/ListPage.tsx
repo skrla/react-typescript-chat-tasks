@@ -23,7 +23,7 @@ function ListPage() {
       {loading ? (
         <ListLoader />
       ) : taskList.length === 0 ? (
-        <h1 className="text-3xl text-center text-gray-300 mt-10">
+        <h1 className="text-3xl text-center text-white mt-10">
           No task list added, add some!
         </h1>
       ) : (

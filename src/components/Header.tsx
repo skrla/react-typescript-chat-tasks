@@ -21,7 +21,6 @@ function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const user = getStorageUser();
 
   const handleNavigate = (page: string) => {
     navigate("/dashboard/" + page);
@@ -41,6 +40,7 @@ function Header() {
   };
 
   useEffect(() => {
+    const user = getStorageUser();
     if (user?.id) {
       dispatch(setUser(user));
       return;
@@ -55,10 +55,10 @@ function Header() {
 
   useEffect(() => {
     const get = async () => {
-      if (user?.id) await BE_getChats(dispatch);
+      if (currentUser.id) await BE_getChats(dispatch);
     };
     get();
-  }, []);
+  }, [dispatch, currentUser.id]);
 
   return (
     <div className="flex items-center flex-wrap z-10 sm:flex-row gap-5 justify-between bg-gradient-to-r from-customGreen to-eggPlant px-5 py-5 md:py-2 text-white drop-shadow-md">

@@ -14,9 +14,11 @@ module.exports = {
         eggPlant: "#47003c",
         customBlack: "#282828",
         customBlackHover: "#3c3c3c",
+        richBlack: "#021211",
+        darkGreen: "#052929",
       },
       backgroundImage: (theme) => ({
-        pattern: "url('/src/assets/backgroundBlack.jpg')",
+        pattern: "url('/src/assets/backgroundBlack.webp')",
       }),
     },
   },

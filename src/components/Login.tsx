@@ -55,20 +55,18 @@ const Login = () => {
       <h1 className="text-white text-center text-bold text-4xl md:text-6xl mb-10">
         {login ? "Login" : "Register"}
       </h1>
-      <div className="flex flex-col p-6 min-h-[150px] gap-3 w-full rounded-3xl drop-shadow-xl bg-customBlack text-white">
+      <div className="flex flex-col p-6 min-h-[150px] gap-3 w-full rounded-3xl drop-shadow-xl bg-customBlack">
         <Input
           name="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="hover:bg-customBlackHover focus:bg-customBlackHover"
         />
         <Input
           name="password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="hover:bg-customBlackHover focus:bg-customBlackHover"
         />
         {!login && (
           <Input
@@ -76,7 +74,6 @@ const Login = () => {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="hover:bg-customBlackHover focus:bg-customBlackHover"
           />
         )}
         {login ? (

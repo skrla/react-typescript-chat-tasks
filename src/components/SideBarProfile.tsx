@@ -23,8 +23,8 @@ function SideBarProfile() {
           <div className="flex p-10 flex-col">
             <div className="relative self-center">
               <img
-                src={currentSelectedChat.img}
-                alt={currentSelectedChat.username}
+                src={img}
+                alt={username}
                 className="w-32 h-32 md:w-48 md:h-48 rounded-full p-[2px] ring ring-gray-300 cursor-pointer hover:shadow-lg"
               />
               <span

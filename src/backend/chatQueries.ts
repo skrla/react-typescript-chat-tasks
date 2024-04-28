@@ -141,7 +141,7 @@ export const BE_sendMsgs = async (
 ) => {
   setLoading(true);
 
-  const res = await addDoc(collection(db, chatColl, chatId, messagesColl), {
+  await addDoc(collection(db, chatColl, chatId, messagesColl), {
     ...data,
     createdAt: serverTimestamp(),
   });
