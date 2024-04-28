@@ -50,7 +50,7 @@ function SideBarUsers() {
               !isChatsTab
                 ? "bg-gradient-to-r from-customGreen to-eggPlant text-white"
                 : "bg-customBlackHover text-white"
-            } rounded-tr-3xl md:rounded-none `}
+            } rounded-tr-3xl`}
           >
             Users
           </p>

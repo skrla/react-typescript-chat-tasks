@@ -4,7 +4,7 @@ import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 import ChatArea from "../components/ChatArea";
 import SideBarProfile from "../components/SideBarProfile";
-const noChat = require("../assets/noChat.jpg");
+const noChat = require("../assets/noChat.png");
 
 function ChatPage() {
   const currentSelectedChat = useSelector(
@@ -21,7 +21,7 @@ function ChatPage() {
           <SideBarProfile />
         </>
       ) : (
-        <div className="hidden flex-[0.7] bg-white rounded-r-3xl shadow-md overflow-hidden lg:block">
+        <div className="hidden flex-[0.7]  rounded-r-3xl shadow-md overflow-hidden lg:block">
           <img
             src={noChat}
             alt="No chat"
